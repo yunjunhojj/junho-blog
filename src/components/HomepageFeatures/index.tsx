@@ -1,10 +1,12 @@
 import clsx from "clsx";
 import Heading from "@theme/Heading";
 import styles from "./styles.module.css";
+import { useColorMode } from "@docusaurus/theme-common";
 
 type FeatureItem = {
   title: string;
-  Svg: React.ComponentType<React.ComponentProps<"svg">>;
+  SvgLight: React.ComponentType<React.ComponentProps<"svg">>;
+  SvgDark: React.ComponentType<React.ComponentProps<"svg">>;
   description: JSX.Element;
 };
 
@@ -12,7 +14,8 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: "React",
-    Svg: require("@site/static/img/lib/react.svg").default,
+    SvgLight: require("@site/static/img/lib/react.svg").default,
+    SvgDark: require("@site/static/img/lib/react.svg").default,
     description: (
       <>
         <p>The library for web and native user interfaces</p>
@@ -25,7 +28,8 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "Next.js",
-    Svg: require("@site/static/img/lib/nextjs.svg").default,
+    SvgLight: require("@site/static/img/lib/nextjs-light.svg").default,
+    SvgDark: require("@site/static/img/lib/nextjs-dark.svg").default,
     description: (
       <>
         <p>The React Framework for the Web</p>
@@ -39,7 +43,8 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "TypeScript",
-    Svg: require("@site/static/img/lib/typescript.svg").default,
+    SvgLight: require("@site/static/img/lib/typescript.svg").default,
+    SvgDark: require("@site/static/img/lib/typescript.svg").default,
     description: (
       <>
         <p>TypeScript: A Static Type Checker</p>
@@ -52,11 +57,17 @@ const FeatureList: FeatureItem[] = [
   },
 ];
 
-function Feature({ title, Svg, description }: FeatureItem) {
+function Feature({ title, SvgLight, SvgDark, description }: FeatureItem) {
+  const { isDarkTheme } = useColorMode();
+
   return (
     <div className={clsx("col col--4")}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        {isDarkTheme ? (
+          <SvgDark className={styles.featureSvg} role="img" />
+        ) : (
+          <SvgLight className={styles.featureSvg} role="img" />
+        )}
       </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>
