@@ -1,0 +1,53 @@
+import { useEffect, useState } from "react";
+import firebase from "@site/firebase"; // firebase.js 파일에서 가져옴
+
+const FirebaseAuth = () => {
+  const [user, setUser] = useState<firebase.User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // 인증 상태 변화 감지 및 처리
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe(); // 컴포넌트가 언마운트될 때 구독 해제
+  }, []);
+
+  const signInWithGoogle = async () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    try {
+      await firebase.auth().signInWithPopup(provider);
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      await firebase.auth().signOut();
+    } catch (error) {
+      console.error("Sign Out Error:", error);
+    }
+  };
+
+  if (loading) {
+    return <p>Loading...</p>; // 로딩 중일 때 표시
+  }
+
+  return (
+    <div>
+      {user ? (
+        <>
+          <p>Welcome, {user.displayName}!</p>
+          <button onClick={signOut}>Sign out</button>
+        </>
+      ) : (
+        <button onClick={signInWithGoogle}>Sign in with Google</button>
+      )}
+    </div>
+  );
+};
+
+export default FirebaseAuth;
