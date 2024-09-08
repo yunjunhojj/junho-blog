@@ -24,7 +24,7 @@ export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
+      title={`${siteConfig.title}`}
       description="antennasm은 안테나 처럼 널리 퍼져나가는 정보를 전달하는 개발자 블로그입니다."
     >
       <HomepageHeader />
