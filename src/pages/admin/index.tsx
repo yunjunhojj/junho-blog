@@ -1,11 +1,13 @@
-// blog 글을 작성하기 위한 admin 페이지
-
 import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import FirebaseAuth from "@site/src/components/auth/fireabase-auth";
+import { useState } from "react";
+import StyledButton from "@site/src/components/ui/styledButton";
 
 const Admin = () => {
   const { siteConfig } = useDocusaurusContext();
+  const [user, setUser] = useState<firebase.default.User | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Layout
@@ -14,7 +16,12 @@ const Admin = () => {
     >
       <div className="container margin-vert--lg">
         <h1>Admin</h1>
-        <FirebaseAuth />
+        <FirebaseAuth user={user} setUser={setUser} />
+        {user && (
+          <StyledButton onClick={() => setIsOpen(true)} backgroundColor="blue">
+            Open dialog
+          </StyledButton>
+        )}
       </div>
     </Layout>
   );

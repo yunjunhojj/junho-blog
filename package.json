@@ -17,7 +17,9 @@
   "dependencies": {
     "@docusaurus/core": "3.5.2",
     "@docusaurus/preset-classic": "3.5.2",
+    "@headlessui/react": "^2.1.5",
     "@mdx-js/react": "^3.0.0",
+    "@uiw/react-markdown-editor": "^6.1.2",
     "clsx": "^2.0.0",
     "firebase": "^10.13.1",
     "prism-react-renderer": "^2.3.0",

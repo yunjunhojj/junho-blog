@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import firebase from "@site/firebase"; // firebase.js 파일에서 가져옴
+import StyledButton from "../ui/styledButton";
 
-const FirebaseAuth = () => {
-  const [user, setUser] = useState<firebase.User | null>(null);
+const FirebaseAuth = ({ user, setUser }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,10 +41,12 @@ const FirebaseAuth = () => {
       {user ? (
         <>
           <p>Welcome, {user.displayName}!</p>
-          <button onClick={signOut}>Sign out</button>
+          <StyledButton onClick={signOut}>Sign out</StyledButton>
         </>
       ) : (
-        <button onClick={signInWithGoogle}>Sign in with Google</button>
+        <StyledButton onClick={signInWithGoogle}>
+          Sign in with Google
+        </StyledButton>
       )}
     </div>
   );
