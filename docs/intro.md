@@ -2,46 +2,8 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+<!-- 이 공간은 제가 앞으로 새로운 라이브러리나 프레임워크를 공부할 때 개념을 정리하고 학습하는 곳입니다. -->
 
-Let's discover **Docusaurus in less than 5 minutes**.
+# 튜토리얼 소개
 
-## Getting Started
-
-Get started by **creating a new site**.
-
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
-
-### What you'll need
-
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+이 섹션은 제가 새로운 라이브러리나 프레임워크를 처음 사용할 때, 개념을 이해하고 정리하기 위한 학습 공간입니다. 각 라이브러리와 프레임워크의 설치 방법, 기본 사용법, 그리고 실전에서 적용하는 방법 등을 다룰 예정입니다. 이 자료를 바탕으로 필요한 지식을 빠르게 습득하고, 나중에 참고할 수 있는 자료로 활용할 계획입니다.
