@@ -1,14 +1,23 @@
-import { useState } from "react";
 import MarkdownEditor from "@uiw/react-markdown-editor";
+import styles from "./md-editor.module.css";
 
-const mdStr = `# This is a H1  \n## This is a H2  \n###### This is a H6`;
-export default function App() {
-  const [markdown, setMarkdown] = useState(mdStr);
+type EditorProps = {
+  value: string;
+  height: string;
+  onChange: (value: string, viewUpdate: any) => void;
+};
+
+const Editor = ({ value, height = "200px", onChange }: EditorProps) => {
   return (
-    <MarkdownEditor
-      value={markdown}
-      height="200px"
-      onChange={(value, viewUpdate) => setMarkdown(value)}
-    />
+    <div className={styles.editorContainer} style={{ height }}>
+      <MarkdownEditor
+        value={value}
+        height={height}
+        onChange={(value, viewUpdate) => onChange(value, viewUpdate)}
+        className={styles.markdownEditor}
+      />
+    </div>
   );
-}
+};
+
+export default Editor;
