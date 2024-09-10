@@ -1,10 +1,11 @@
-import styles from "./index.module.css";
+import styles from "./editor-dialog.module.css";
 import {
   Description,
   Dialog,
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
+import Editor from "./md-editor";
 
 type EditorDialogProps = {
   open: boolean;
@@ -14,28 +15,32 @@ type EditorDialogProps = {
   content: React.ReactNode;
 };
 
-const EditorDialog = (props: EditorDialogProps) => {
-  const { open, onClose, onConfirm, title, content } = props;
-
+const EditorDialog = ({
+  open,
+  onClose,
+  onConfirm,
+  title,
+  content,
+}: EditorDialogProps) => {
   return (
-    <Dialog
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
-      className={styles.dialog}
-    >
-      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <DialogPanel className="max-w-lg space-y-4 border bg-white p-12">
-          <DialogTitle className="font-bold">Deactivate account</DialogTitle>
-          <Description>
-            This will permanently deactivate your account
+    <Dialog open={open} onClose={() => onClose()} className={styles.dialog}>
+      <div className={styles.dialogContent}>
+        <DialogPanel className={styles.dialogPanel}>
+          <DialogTitle className={styles.dialogTitle}>{title}</DialogTitle>
+          <Description className={styles.description}>
+            <p>{content}</p>
           </Description>
-          <p>
-            Are you sure you want to deactivate your account? All of your data
-            will be permanently removed.
-          </p>
-          <div className="flex gap-4">
-            <button onClick={() => setIsOpen(false)}>Cancel</button>
-            <button onClick={() => setIsOpen(false)}>Deactivate</button>
+          <Editor value={title} height="200px" onChange={() => {}} />
+          <div className={styles.buttonGroup}>
+            <button
+              onClick={() => onConfirm()}
+              className={styles.confirmButton}
+            >
+              Confirm
+            </button>
+            <button onClick={() => onClose()} className={styles.cancelButton}>
+              Cancel
+            </button>
           </div>
         </DialogPanel>
       </div>
