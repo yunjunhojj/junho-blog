@@ -56,8 +56,12 @@ const config: Config = {
     navbar: {
       title: "antennasm blog",
       logo: {
-        alt: "antennasm blog",
+        alt: "logo",
         src: "img/favicon.ico",
+        style: {
+          width: "32px",
+          height: "32px",
+        },
       },
       items: [
         {
