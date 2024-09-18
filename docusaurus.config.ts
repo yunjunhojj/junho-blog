@@ -2,6 +2,15 @@ import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 const config: Config = {
+  headTags: [
+    {
+      tagName: "meta",
+      attributes: {
+        name: "google-site-verification",
+        content: "sTSv9cLKWzMkYN33iQdob2tQ3Q_Y4m2zSrTrBLJHeg4",
+      },
+    },
+  ],
   plugins: [require.resolve("docusaurus-lunr-search")],
 
   title: "antennasm blog",
