@@ -3,7 +3,7 @@ import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
-  // plugins: [require.resolve("docusaurus-lunr-search")],
+  plugins: ["@aldridged/docusaurus-plugin-lunr"],
 
   title: "antennasm blog",
   tagline: "think, write, share",
