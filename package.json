@@ -1,6 +1,6 @@
 {
-  "name": "docu-blog",
-  "version": "0.0.0",
+  "name": "antennasm-blog",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -21,13 +21,13 @@
     "@mdx-js/react": "^3.0.0",
     "@uiw/react-markdown-editor": "^6.1.2",
     "clsx": "^2.0.0",
+    "docusaurus-lunr-search": "^3.5.0",
     "firebase": "^10.13.1",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
-    "@aldridged/docusaurus-plugin-lunr": "^1.0.0-alpha.10",
     "@docusaurus/module-type-aliases": "3.5.2",
     "@docusaurus/tsconfig": "3.5.2",
     "@docusaurus/types": "3.5.2",

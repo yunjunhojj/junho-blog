@@ -11,13 +11,21 @@ function HomepageHeader() {
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
-        <Heading as="h1" className="hero__title">
+        <Heading
+          className={clsx("hero__title", "text--center", "margin-bottom--lg")}
+          as={"h1"}
+        >
           {siteConfig.title}
         </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <p className="hero__subtitle">
-          antennasm은 안테나 처럼 널리 퍼져나가는 정보를 전달하는 개발자
-          블로그입니다.
+        <p
+          className={clsx(
+            "hero__subtitle",
+            "text--center",
+            "margin-bottom--lg",
+            "padding-horiz--md"
+          )}
+        >
+          {siteConfig.tagline}
         </p>
       </div>
     </header>
