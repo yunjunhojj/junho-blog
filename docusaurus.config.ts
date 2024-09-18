@@ -2,10 +2,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 const config: Config = {
-  plugins: [
-    require.resolve("docusaurus-lunr-search"),
-    require.resolve("@docusaurus/plugin-sitemap"),
-  ],
+  plugins: [require.resolve("docusaurus-lunr-search")],
 
   title: "antennasm blog",
   tagline: "think, write, share",

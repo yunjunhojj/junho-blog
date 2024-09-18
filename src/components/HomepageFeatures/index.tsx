@@ -2,6 +2,7 @@ import clsx from "clsx";
 import Heading from "@theme/Heading";
 import styles from "./styles.module.css";
 import { useColorMode } from "@docusaurus/theme-common";
+import { useEffect, useState } from "react";
 
 type FeatureItem = {
   title: string;
@@ -59,11 +60,20 @@ const FeatureList: FeatureItem[] = [
 
 function Feature({ title, SvgLight, SvgDark, description }: FeatureItem) {
   const { isDarkTheme } = useColorMode();
+  const [colorMode, setColorMode] = useState(null);
+
+  useEffect(() => {
+    setColorMode(isDarkTheme);
+  }, [isDarkTheme]);
+
+  if (colorMode === null) {
+    return null;
+  }
 
   return (
     <div className={clsx("col col--4")}>
       <div className="text--center">
-        {isDarkTheme ? (
+        {colorMode ? (
           <SvgDark className={styles.featureSvg} role="img" />
         ) : (
           <SvgLight className={styles.featureSvg} role="img" />
