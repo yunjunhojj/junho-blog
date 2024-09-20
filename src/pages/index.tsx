@@ -1,4 +1,3 @@
-import BrowserOnly from "@docusaurus/BrowserOnly";
 import clsx from "clsx";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
@@ -23,7 +22,7 @@ const Home = (): JSX.Element => {
         </div>
       </header>
       <main>
-        <HomepageFeatures />;
+        <HomepageFeatures />
       </main>
     </Layout>
   );
