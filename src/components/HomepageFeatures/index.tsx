@@ -10,15 +10,15 @@ const initialPosition = {
 
 // 이미지 좌표 설정 (임의로 설정한 값)
 const docsPosition = {
-  x: 800,
-  y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
+  x: typeof window !== "undefined" ? window.innerWidth / 2 - 180 : 0,
+  y: typeof window !== "undefined" ? window.innerHeight / 2 + 50 : 0,
 };
 const blogPosition = {
   x: typeof window !== "undefined" ? window.innerWidth / 2 + 150 : 0,
-  y: 400,
+  y: typeof window !== "undefined" ? window.innerHeight / 2 - 100 : 0,
 };
 const aboutPosition = {
-  x: typeof window !== "undefined" ? window.innerWidth - 800 : 0,
+  x: typeof window !== "undefined" ? window.innerWidth - 400 : 0,
   y: typeof window !== "undefined" ? window.innerHeight / 2 + 100 : 0,
 };
 
