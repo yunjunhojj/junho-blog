@@ -104,7 +104,7 @@ export default function HomepageFeatures(): JSX.Element {
               position: "absolute",
               top: position.y,
               left: position.x,
-              transition: "top 1s, left 1s", // 움직임 부드럽게 처리
+              transition: "top 2s, left 2s", // 움직임 부드럽게 처리
             }}
           >
             <img
