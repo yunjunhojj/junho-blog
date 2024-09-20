@@ -59,7 +59,7 @@ const config: Config = {
   ],
 
   themeConfig: {
-    metadatas: [
+    metadata: [
       {
         name: "twitter:card",
         content: "summary",
