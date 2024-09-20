@@ -15,12 +15,6 @@ const aboutPosition = {
 export default function HomepageFeatures(): JSX.Element {
   const [position, setPosition] = useState(initialPosition);
 
-  // 터치 이동 상태를 관리하는 상태 값
-  const [isTouching, setIsTouching] = useState(false);
-  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(
-    null
-  );
-
   // 방향키 입력을 감지하여 캐릭터를 이동시키는 함수 (데스크탑)
   const handleKeyDown = (event: KeyboardEvent) => {
     switch (event.key) {
@@ -55,36 +49,13 @@ export default function HomepageFeatures(): JSX.Element {
 
   // 터치 시작 시 실행되는 함수
   const handleTouchStart = (event: TouchEvent) => {
-    console.log("test");
     const touch = event.touches[0];
-    setTouchStart({ x: touch.clientX, y: touch.clientY });
-    setIsTouching(true);
-  };
-
-  // 터치 이동 시 실행되는 함수
-  const handleTouchMove = (event: TouchEvent) => {
-    if (!isTouching || !touchStart) return;
-
-    const touch = event.touches[0];
-    const deltaX = touch.clientX - touchStart.x;
-    const deltaY = touch.clientY - touchStart.y;
-
-    setPosition((prevPosition) => ({
-      x: prevPosition.x + deltaX / 10, // 터치 이동 거리에 비례해 캐릭터 이동
-      y: prevPosition.y + deltaY / 10,
-    }));
-
-    // 터치 위치 갱신
-    setTouchStart({ x: touch.clientX, y: touch.clientY });
-  };
-
-  // 터치 종료 시 실행되는 함수
-  const handleTouchEnd = () => {
-    setIsTouching(false);
+    setPosition({ x: touch.clientX - 50, y: touch.clientY - 50 });
   };
 
   // 특정 페이지 영역에 도달했을 때 해당 페이지로 이동하는 함수
   const handlePageNavigation = () => {
+    console.log(position);
     const distance = (pos1, pos2) =>
       Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
 
@@ -100,16 +71,13 @@ export default function HomepageFeatures(): JSX.Element {
   // 키보드 및 터치 이벤트 핸들러 등록
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("touchstart", handleTouchStart);
-    window.addEventListener("touchmove", handleTouchMove);
-    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("touchstart", handleTouchStart, { passive: false });
+
     handlePageNavigation(); // 캐릭터 위치에 따른 페이지 이동 처리
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("touchend", handleTouchEnd);
     };
   }, [position]);
 
@@ -121,7 +89,7 @@ export default function HomepageFeatures(): JSX.Element {
           position: "absolute",
           top: position.y,
           left: position.x,
-          transition: "top 0.1s, left 0.1s", // 움직임 부드럽게 처리
+          transition: "top 1s, left 1s", // 움직임 부드럽게 처리
         }}
       >
         <img
