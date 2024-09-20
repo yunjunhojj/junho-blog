@@ -55,9 +55,10 @@ export default function HomepageFeatures(): JSX.Element {
 
   // 특정 페이지 영역에 도달했을 때 해당 페이지로 이동하는 함수
   const handlePageNavigation = () => {
-    console.log(position);
-    const distance = (pos1, pos2) =>
-      Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
+    const distance = (
+      pos1: { x: number; y: number },
+      pos2: { x: number; y: number }
+    ) => Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
 
     if (distance(position, docsPosition) < 100) {
       window.location.href = "/docs/intro"; // Docs 페이지로 이동
