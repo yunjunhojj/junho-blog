@@ -13,7 +13,7 @@ const config: Config = {
   ],
   plugins: [require.resolve("docusaurus-lunr-search")],
 
-  title: "antennasm blog",
+  title: "antennasm",
   tagline: "think, write, share",
   favicon: "img/favicon.ico",
 
@@ -24,7 +24,7 @@ const config: Config = {
   baseUrl: "/",
 
   organizationName: "yun junho",
-  projectName: "antennasm-blog",
+  projectName: "antennasm",
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -59,7 +59,42 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Replace with your project's social card
+    metadatas: [
+      {
+        name: "twitter:card",
+        content: "summary",
+      },
+      {
+        name: "twitter:site",
+        content: "@antennasm",
+      },
+      {
+        name: "twitter:creator",
+        content: "@antennasm",
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+      {
+        property: "og:url",
+        content: "https://antennasm.netlify.app",
+      },
+      {
+        property: "og:title",
+        content: "antennasm",
+      },
+      {
+        property: "og:description",
+        content: "think, write, share",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://avatars.githubusercontent.com/u/50473516?s=400&u=33f3fa8075facc0dc8cda88be2b6df4ba450f824&v=4",
+      },
+    ],
+
     image: "img/favicon.ico",
     navbar: {
       title: "antennasm blog",
