@@ -8,10 +8,7 @@ import styles from "./index.module.css";
 const Home = (): JSX.Element => {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Layout
-      title="main"
-      description="Description will go into a meta tag in <head />"
-    >
+    <Layout title="main" description="생각하고, 쓰고, 공유하다.">
       <header className={clsx("hero hero--primary", styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>

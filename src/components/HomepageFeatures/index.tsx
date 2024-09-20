@@ -18,7 +18,7 @@ const blogPosition = {
   y: typeof window !== "undefined" ? window.innerHeight / 2 - 100 : 0,
 };
 const aboutPosition = {
-  x: typeof window !== "undefined" ? window.innerWidth - 400 : 0,
+  x: typeof window !== "undefined" ? window.innerWidth / 2 + 200 : 0,
   y: typeof window !== "undefined" ? window.innerHeight / 2 + 100 : 0,
 };
 
