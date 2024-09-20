@@ -70,7 +70,7 @@ export default function HomepageFeatures(): JSX.Element {
       pos2: { x: number; y: number }
     ) => Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
 
-    if (distance(position, docsPosition) < 100) {
+    if (distance(position, docsPosition) < 95) {
       window.location.href = "/docs/intro"; // Docs 페이지로 이동
     } else if (distance(position, blogPosition) < 90) {
       window.location.href = "/blog"; // Blog 페이지로 이동
@@ -105,10 +105,11 @@ export default function HomepageFeatures(): JSX.Element {
               top: position.y,
               left: position.x,
               transition: "top 2s, left 2s", // 움직임 부드럽게 처리
+              backgroundColor: "transparent",
             }}
           >
             <img
-              src="/img/main_game/mac3.jpeg" // 캐릭터 이미지
+              src="/img/main_game/mac.png" // 캐릭터 이미지
               alt="맥북 캐릭터"
               width={100}
               height={100}
@@ -124,10 +125,10 @@ export default function HomepageFeatures(): JSX.Element {
             }}
           >
             <img
-              src="/img/main_game/docs.jpeg" // Docs 페이지로 이동하는 이미지
+              src="/svg/docs.svg" // Docs 페이지로 이동하는 이미지
               alt="Docs"
               width={100}
-              height={100}
+              height={50}
             />
           </div>
 
@@ -140,9 +141,9 @@ export default function HomepageFeatures(): JSX.Element {
             }}
           >
             <img
-              src="/img/main_game/blog.png" // Blog 페이지로 이동하는 이미지
+              src="/svg/blog.svg" // Blog 페이지로 이동하는 이미지
               alt="Blog"
-              width={50}
+              width={80}
               height={50}
             />
           </div>
@@ -156,10 +157,10 @@ export default function HomepageFeatures(): JSX.Element {
             }}
           >
             <img
-              src="/img/main_game/about.png" // About 페이지로 이동하는 이미지
+              src="/svg/about.svg" // About 페이지로 이동하는 이미지
               alt="About"
               width={100}
-              height={100}
+              height={50}
             />
           </div>
         </div>

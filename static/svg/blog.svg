@@ -1,0 +1,16 @@
+<svg width="200" height="100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff8c00; stop-opacity:1">
+        <animate attributeName="stop-color" values="#ff8c00;#1e90ff;#ff8c00" dur="5s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" style="stop-color:#1e90ff; stop-opacity:1">
+        <animate attributeName="stop-color" values="#1e90ff;#ff8c00;#1e90ff" dur="5s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+  </defs>
+
+  <text font-weight="bold"  x="50%" y="50%" font-size="40" font-family="Arial, sans-serif" fill="url(#grad1)" text-anchor="middle" alignment-baseline="middle">
+    Blog
+  </text>
+</svg>

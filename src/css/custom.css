@@ -28,3 +28,19 @@
   --ifm-color-primary-lightest: #b3d6ff;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+@keyframes gradientShift {
+  0% {
+    stop-color: #ff8c00;
+  }
+  50% {
+    stop-color: #1e90ff;
+  }
+  100% {
+    stop-color: #ff8c00;
+  }
+}
+
+.gradient-animate stop {
+  animation: gradientShift 3s infinite;
+}
