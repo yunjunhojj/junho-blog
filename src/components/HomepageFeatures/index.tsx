@@ -1,15 +1,25 @@
 import { useEffect, useState } from "react";
 import styles from "./styles.module.css";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 
 // 캐릭터 위치를 관리하기 위한 상태 정의
-const initialPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+const initialPosition = {
+  x: typeof window !== "undefined" ? window.innerWidth / 2 : 0,
+  y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
+};
 
 // 이미지 좌표 설정 (임의로 설정한 값)
-const docsPosition = { x: 700, y: window.innerHeight / 2 };
-const blogPosition = { x: window.innerWidth / 2 + 200, y: 300 };
+const docsPosition = {
+  x: 700,
+  y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
+};
+const blogPosition = {
+  x: typeof window !== "undefined" ? window.innerWidth / 2 + 200 : 0,
+  y: 300,
+};
 const aboutPosition = {
-  x: window.innerWidth - 700,
-  y: window.innerHeight / 2 + 100,
+  x: typeof window !== "undefined" ? window.innerWidth - 700 : 0,
+  y: typeof window !== "undefined" ? window.innerHeight / 2 + 100 : 0,
 };
 
 export default function HomepageFeatures(): JSX.Element {
@@ -72,7 +82,9 @@ export default function HomepageFeatures(): JSX.Element {
   // 키보드 및 터치 이벤트 핸들러 등록
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("touchstart", handleTouchStart, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart, {
+      passive: false,
+    });
 
     handlePageNavigation(); // 캐릭터 위치에 따른 페이지 이동 처리
 
@@ -83,71 +95,75 @@ export default function HomepageFeatures(): JSX.Element {
   }, [position]);
 
   return (
-    <div>
-      {/* 캐릭터 */}
-      <div
-        style={{
-          position: "absolute",
-          top: position.y,
-          left: position.x,
-          transition: "top 1s, left 1s", // 움직임 부드럽게 처리
-        }}
-      >
-        <img
-          src="/img/main_game/mac3.jpeg" // 캐릭터 이미지
-          alt="맥북 캐릭터"
-          width={100}
-          height={100}
-        />
-      </div>
+    <BrowserOnly fallback={<div>Loading...</div>}>
+      {() => (
+        <div>
+          {/* 캐릭터 */}
+          <div
+            style={{
+              position: "absolute",
+              top: position.y,
+              left: position.x,
+              transition: "top 1s, left 1s", // 움직임 부드럽게 처리
+            }}
+          >
+            <img
+              src="/img/main_game/mac3.jpeg" // 캐릭터 이미지
+              alt="맥북 캐릭터"
+              width={100}
+              height={100}
+            />
+          </div>
 
-      {/* Docs 이미지 */}
-      <div
-        style={{
-          position: "absolute",
-          top: docsPosition.y,
-          left: docsPosition.x,
-        }}
-      >
-        <img
-          src="/img/main_game/docs.jpeg" // Docs 페이지로 이동하는 이미지
-          alt="Docs"
-          width={100}
-          height={100}
-        />
-      </div>
+          {/* Docs 이미지 */}
+          <div
+            style={{
+              position: "absolute",
+              top: docsPosition.y,
+              left: docsPosition.x,
+            }}
+          >
+            <img
+              src="/img/main_game/docs.jpeg" // Docs 페이지로 이동하는 이미지
+              alt="Docs"
+              width={100}
+              height={100}
+            />
+          </div>
 
-      {/* Blog 이미지 */}
-      <div
-        style={{
-          position: "absolute",
-          top: blogPosition.y,
-          left: blogPosition.x,
-        }}
-      >
-        <img
-          src="/img/main_game/blog.png" // Blog 페이지로 이동하는 이미지
-          alt="Blog"
-          width={50}
-          height={50}
-        />
-      </div>
+          {/* Blog 이미지 */}
+          <div
+            style={{
+              position: "absolute",
+              top: blogPosition.y,
+              left: blogPosition.x,
+            }}
+          >
+            <img
+              src="/img/main_game/blog.png" // Blog 페이지로 이동하는 이미지
+              alt="Blog"
+              width={50}
+              height={50}
+            />
+          </div>
 
-      {/* About 이미지 */}
-      <div
-        style={{
-          position: "absolute",
-          top: aboutPosition.y,
-          left: aboutPosition.x,
-        }}
-      >
-        <img
-          src="/img/main_game/about.png" // About 페이지로 이동하는 이미지
-          alt="About"
-          width={100}
-          height={100}
-        />
-      </div>
-    </div>
+          {/* About 이미지 */}
+          <div
+            style={{
+              position: "absolute",
+              top: aboutPosition.y,
+              left: aboutPosition.x,
+            }}
+          >
+            <img
+              src="/img/main_game/about.png" // About 페이지로 이동하는 이미지
+              alt="About"
+              width={100}
+              height={100}
+            />
+          </div>
+        </div>
+      )}
+    </BrowserOnly>
   );
 }

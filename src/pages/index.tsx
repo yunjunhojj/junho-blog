@@ -17,13 +17,13 @@ const Home = (): JSX.Element => {
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
-          <p className="hero__subtitle">
-            키보드 방향키로 캐릭터를 움직여보세요!
+          <p className="hero__description">
+            키보드 방향키 또는 화면을 터치하여 캐릭터를 이동시킬 수 있습니다.
           </p>
         </div>
       </header>
       <main>
-        <BrowserOnly>{() => <HomepageFeatures />}</BrowserOnly>
+        <HomepageFeatures />;
       </main>
     </Layout>
   );
