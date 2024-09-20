@@ -127,8 +127,6 @@ export default function HomepageFeatures(): JSX.Element {
             <img
               src="/svg/docs.svg" // Docs 페이지로 이동하는 이미지
               alt="Docs"
-              width={100}
-              height={50}
             />
           </div>
 
@@ -143,8 +141,6 @@ export default function HomepageFeatures(): JSX.Element {
             <img
               src="/svg/blog.svg" // Blog 페이지로 이동하는 이미지
               alt="Blog"
-              width={80}
-              height={50}
             />
           </div>
 
@@ -159,8 +155,6 @@ export default function HomepageFeatures(): JSX.Element {
             <img
               src="/svg/about.svg" // About 페이지로 이동하는 이미지
               alt="About"
-              width={100}
-              height={50}
             />
           </div>
         </div>
