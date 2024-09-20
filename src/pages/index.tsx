@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
@@ -9,7 +8,7 @@ const Home = (): JSX.Element => {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout title="main" description="생각하고, 쓰고, 공유하다.">
-      <header className={clsx("hero hero--primary", styles.heroBanner)}>
+      <header className={styles.heroBanner}>
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>

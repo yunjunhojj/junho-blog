@@ -44,3 +44,8 @@
 .gradient-animate stop {
   animation: gradientShift 3s infinite;
 }
+
+/* placeholder */
+.search-bar {
+  background-color: green;
+}
