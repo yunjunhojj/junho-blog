@@ -1,102 +1,141 @@
-import clsx from "clsx";
-import Heading from "@theme/Heading";
-import styles from "./styles.module.css";
-import { useColorMode } from "@docusaurus/theme-common";
 import { useEffect, useState } from "react";
+import styles from "./styles.module.css";
 
-type FeatureItem = {
-  title: string;
-  SvgLight: React.ComponentType<React.ComponentProps<"svg">>;
-  SvgDark: React.ComponentType<React.ComponentProps<"svg">>;
-  description: JSX.Element;
+// 캐릭터 위치를 관리하기 위한 상태 정의
+const initialPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+// 이미지 좌표 설정 (임의로 설정한 값)
+const docsPosition = { x: 700, y: window.innerHeight / 2 };
+const blogPosition = { x: window.innerWidth / 2 + 200, y: 300 };
+const aboutPosition = {
+  x: window.innerWidth - 700,
+  y: window.innerHeight / 2 + 100,
 };
 
-// react, nextjs, typescript 에 대해 알아보기
-const FeatureList: FeatureItem[] = [
-  {
-    title: "React",
-    SvgLight: require("@site/static/img/lib/react.svg").default,
-    SvgDark: require("@site/static/img/lib/react.svg").default,
-    description: (
-      <>
-        <p>The library for web and native user interfaces</p>
-        <p>
-          리액트는 프론트엔드 개발을 쉽고 빠르고 안정적으로 만들어 줍니다.
-          컴포넌트 기반으로 UI를 구성할 수 있다는 점이 가장 큰 장점입니다.
-        </p>
-      </>
-    ),
-  },
-  {
-    title: "Next.js",
-    SvgLight: require("@site/static/img/lib/nextjs-light.svg").default,
-    SvgDark: require("@site/static/img/lib/nextjs-dark.svg").default,
-    description: (
-      <>
-        <p>The React Framework for the Web</p>
-        <p>
-          Next.js는 리액트를 기반으로 한 프레임워크로, 리액트를 더욱 쉽게 사용할
-          수 있도록 다양한 기능을 지원합니다. 생태계 또한 크고 지속적으로
-          성장하고 있습니다.
-        </p>
-      </>
-    ),
-  },
-  {
-    title: "TypeScript",
-    SvgLight: require("@site/static/img/lib/typescript.svg").default,
-    SvgDark: require("@site/static/img/lib/typescript.svg").default,
-    description: (
-      <>
-        <p>TypeScript: A Static Type Checker</p>
-        <p>
-          TypeScript는 자바스크립트의 상위 집합으로, 정적 타입을 지원하여 코드를
-          더 안정적이고 예측 가능하게 만들어 줍니다.
-        </p>
-      </>
-    ),
-  },
-];
+export default function HomepageFeatures(): JSX.Element {
+  const [position, setPosition] = useState(initialPosition);
 
-function Feature({ title, SvgLight, SvgDark, description }: FeatureItem) {
-  const { isDarkTheme } = useColorMode();
-  const [colorMode, setColorMode] = useState(null);
+  // 방향키 입력을 감지하여 캐릭터를 이동시키는 함수
+  const handleKeyDown = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case "ArrowLeft":
+        setPosition((prevPosition) => ({
+          ...prevPosition,
+          x: prevPosition.x - 10,
+        }));
+        break;
+      case "ArrowRight":
+        setPosition((prevPosition) => ({
+          ...prevPosition,
+          x: prevPosition.x + 10,
+        }));
+        break;
+      case "ArrowUp":
+        setPosition((prevPosition) => ({
+          ...prevPosition,
+          y: prevPosition.y - 10,
+        }));
+        break;
+      case "ArrowDown":
+        setPosition((prevPosition) => ({
+          ...prevPosition,
+          y: prevPosition.y + 10,
+        }));
+        break;
+      default:
+        break;
+    }
+  };
 
+  // 특정 페이지 영역에 도달했을 때 해당 페이지로 이동하는 함수
+  const handlePageNavigation = () => {
+    const distance = (pos1, pos2) =>
+      Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
+
+    if (distance(position, docsPosition) < 100) {
+      window.location.href = "/docs/intro"; // Docs 페이지로 이동
+    } else if (distance(position, blogPosition) < 90) {
+      window.location.href = "/blog"; // Blog 페이지로 이동
+    } else if (distance(position, aboutPosition) < 120) {
+      window.location.href = "/about"; // About 페이지로 이동
+    }
+  };
+
+  // 키보드 이벤트 핸들러 등록
   useEffect(() => {
-    setColorMode(isDarkTheme);
-  }, [isDarkTheme]);
-
-  if (colorMode === null) {
-    return null;
-  }
+    window.addEventListener("keydown", handleKeyDown);
+    handlePageNavigation(); // 캐릭터 위치에 따른 페이지 이동 처리
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [position]); // position이 업데이트 될 때마다 다시 이벤트 처리
 
   return (
-    <div className={clsx("col col--4")}>
-      <div className="text--center">
-        {colorMode ? (
-          <SvgDark className={styles.featureSvg} role="img" />
-        ) : (
-          <SvgLight className={styles.featureSvg} role="img" />
-        )}
+    <div>
+      {/* 캐릭터 */}
+      <div
+        style={{
+          position: "absolute",
+          top: position.y,
+          left: position.x,
+          transition: "top 0.1s, left 0.1s", // 움직임 부드럽게 처리
+        }}
+      >
+        <img
+          src="/img/main_game/mac3.jpeg" // 캐릭터 이미지
+          alt="맥북 캐릭터"
+          width={100}
+          height={100}
+        />
       </div>
-      <div className="text--center padding-horiz--md">
-        <Heading as="h3">{title}</Heading>
-        <p>{description}</p>
+
+      {/* Docs 이미지 */}
+      <div
+        style={{
+          position: "absolute",
+          top: docsPosition.y,
+          left: docsPosition.x,
+        }}
+      >
+        <img
+          src="/img/main_game/docs.jpeg" // Docs 페이지로 이동하는 이미지
+          alt="Docs"
+          width={100}
+          height={100}
+        />
+      </div>
+
+      {/* Blog 이미지 */}
+      <div
+        style={{
+          position: "absolute",
+          top: blogPosition.y,
+          left: blogPosition.x,
+        }}
+      >
+        <img
+          src="/img/main_game/blog.png" // Blog 페이지로 이동하는 이미지
+          alt="Blog"
+          width={50}
+          height={50}
+        />
+      </div>
+
+      {/* About 이미지 */}
+      <div
+        style={{
+          position: "absolute",
+          top: aboutPosition.y,
+          left: aboutPosition.x,
+        }}
+      >
+        <img
+          src="/img/main_game/about.png" // About 페이지로 이동하는 이미지
+          alt="About"
+          width={100}
+          height={100}
+        />
       </div>
     </div>
-  );
-}
-
-export default function HomepageFeatures(): JSX.Element {
-  return (
-    <section className={styles.features}>
-      <div className="container">
-        <div className="row">
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
