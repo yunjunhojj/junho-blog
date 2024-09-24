@@ -11,7 +11,15 @@ const config: Config = {
       },
     },
   ],
-  plugins: [require.resolve("docusaurus-lunr-search")],
+  plugins: [
+    require.resolve("docusaurus-lunr-search"),
+    [
+      "@docusaurus/plugin-google-tag-manager",
+      {
+        containerId: "GTM-12345",
+      },
+    ],
+  ],
 
   title: "antennasm",
   tagline: "think, write, share",
@@ -40,11 +48,6 @@ const config: Config = {
   presets: [
     [
       "classic",
-      {
-        googleTagManager: {
-          containerId: "GTM-PMTNWHK4",
-        },
-      },
       {
         docs: {
           sidebarPath: "./sidebars.ts",
