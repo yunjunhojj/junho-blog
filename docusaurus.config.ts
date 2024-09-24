@@ -14,9 +14,10 @@ const config: Config = {
   plugins: [
     require.resolve("docusaurus-lunr-search"),
     [
-      "@docusaurus/plugin-google-tag-manager",
+      "@docusaurus/plugin-google-gtag",
       {
-        containerId: "GTM-12345",
+        trackingID: "G-FKFVJKFE2W",
+        anonymizeIP: true,
       },
     ],
   ],
