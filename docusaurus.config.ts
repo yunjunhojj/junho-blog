@@ -41,6 +41,11 @@ const config: Config = {
     [
       "classic",
       {
+        googleTagManager: {
+          containerId: "GTM-PMTNWHK4",
+        },
+      },
+      {
         docs: {
           sidebarPath: "./sidebars.ts",
         },
