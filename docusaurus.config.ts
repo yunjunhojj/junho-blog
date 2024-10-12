@@ -124,6 +124,11 @@ const config: Config = {
         },
         { to: "/blog", label: "Blog", position: "left" },
         {
+          to: "/docs/toolbox/intro",
+          label: "Toolbox",
+          position: "left",
+        },
+        {
           href: "https://www.github.com/yunjunhojj",
           label: "GitHub",
           position: "right",
