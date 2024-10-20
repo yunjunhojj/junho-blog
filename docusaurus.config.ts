@@ -129,6 +129,11 @@ const config: Config = {
           position: "left",
         },
         {
+          to: "/docs/books/intro",
+          label: "Books",
+          position: "left",
+        },
+        {
           href: "https://www.github.com/yunjunhojj",
           label: "GitHub",
           position: "right",
