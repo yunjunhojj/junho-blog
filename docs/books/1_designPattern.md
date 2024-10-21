@@ -365,3 +365,163 @@ console.log(person.name); // Jane
 | 방문자                   | 행동      | 객체   | 객체의 구조와 기능을 분리하여 기능을 추가하는 방법을 제공합니다.                                            |
 
 </details>
+
+## 7장
+
+<details>
+  <summary>자바스크립트 디자인 패턴 - 분량 많음</summary>
+
+### 생성자 패턴
+
+> 생성 패턴은 객체를 생성하는 방법을 다룹니다. (생성자 패턴, 모듈 패턴, 노출 모듈 패턴, 팩토리 패턴, 프로토타입 패턴, 싱글턴 패턴)
+
+생성자 (constructor)는 객체가 새로 만들어진 뒤 초기화를 위해 호출되는 함수입니다. 생성자 함수는 new 키워드를 사용하여 호출됩니다.
+
+자바스크립트에서 거의 모든 것은 객체입니다. 그리고 클래스는 자바스크립트가 가진 프로토타입의 상속을 이용한 문법적 설탕입니다.
+
+### 객체를 생성하는 방법
+
+> 객체를 생성하는 방법은 다음과 같습니다.
+
+- 객체 리터럴
+- 생성자 함수
+- Object.create 메서드
+- 클래스
+
+```javascript
+// 객체 리터럴
+const obj = { name: "John" };
+
+// 생성자 함수
+function Person(name) {
+  this.name = name;
+}
+const person = new Person("John");
+
+// Object.create 메서드
+const obj = Object.create({ name: "John" });
+
+// 클래스
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+}
+const person = new Person("John");
+```
+
+**객체에 키와 값을 추가하는 방법**
+
+```javascript
+// dot notation
+obj.name = "John";
+const name = obj.name;
+
+// bracket notation
+obj["name"] = "John";
+const name = obj["name"];
+
+// es5
+Object.defineProperty(obj, "name", {
+  value: "John",
+  writable: true,
+  enumerable: true,
+  configurable: true,
+});
+
+// 위의 방식을 함수로 만들어 사용
+function defineProp(obj, key, value) {
+  const config = {
+    value,
+    writable: true,
+    enumerable: true,
+    configurable: true,
+  };
+  Object.defineProperty(obj, key, config);
+}
+
+const person = {};
+
+defineProp(person, "name", "John");
+console.log(person.name); // John
+
+// defineProperties 함수를 사용하여 여러 개의 속성을 추가할 수 있습니다.
+object.defineProperties(person, {
+  name: {
+    value: "John",
+    writable: true,
+  },
+  age: {
+    value: 30,
+    writable: false,
+  },
+});
+```
+
+**객체를 상속하는 방법**
+
+```javascript
+// Object.create 메서드를 사용하여 객체를 상속할 수 있습니다.
+const parent = {
+  name: "John",
+  age: 30,
+};
+
+const child = Object.create(parent);
+console.log(child.name); // John
+console.log(child.age); // 30
+```
+
+### 생성자의 기본 특징
+
+> ES2015에 도입된 클래스는 객체 템플릿을 정의하고 캡슐화 및 상속을 지원하는 방법을 제공합니다.
+
+```javascript
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+}
+
+const person_John = new Person("John", 30);
+const person_Jane = new Person("Jane", 25);
+console.log(person_John.name); // John
+console.log(person_Jane.name); // Jane
+
+console.log(person_John.age); // 30
+console.log(person_Jane.age); // 25
+```
+
+### 프로토 타입을 가진 생성자
+
+> 프로토타입은 객체의 부모 역할을 하는 객체입니다. 모든 객체는 프로토타입을 가지고 있습니다.
+
+```javascript
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+Person.prototype.getName = function () {
+  return this.name;
+};
+
+Person.prototype.getAge = function () {
+  return this.age;
+};
+
+const person = new Person("John", 30);
+console.log(person.getName()); // John
+console.log(person.getAge()); // 30
+
+const person2 = new Person("Jane", 25);
+console.log(person2.getName()); // Jane
+console.log(person2.getAge()); // 25
+```
+
+### 모듈 패턴
+
+> 모듈은 코드를 논리적인 단위로 분리하는 방법을 제공합니다. 모듈은 코드를 재사용하고 관리하기 쉽게 만들어줍니다.
+
+</details>
