@@ -3803,6 +3803,13 @@ commander@^8.3.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-8.3.0.tgz#4837ea1b2da67b9c616a67afbb0fafee567bca66"
   integrity sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==
 
+commentbox.io@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/commentbox.io/-/commentbox.io-2.1.0.tgz#6aef7c11650e094eabfbf0b34b28e20edb7560f0"
+  integrity sha512-qum1AMOQQrv9afPvGzpdHbHpDADBHeFS5lmy6/kMe1pS4+nHt+80VbuImjVNn4BJpG4WNbQmbbskGSnv0e3vyA==
+  dependencies:
+    qs "^6.5.2"
+
 common-path-prefix@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/common-path-prefix/-/common-path-prefix-3.0.0.tgz#7d007a7e07c58c4b4d5f433131a19141b29f11e0"
@@ -4299,6 +4306,11 @@ direction@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/direction/-/direction-2.0.1.tgz#71800dd3c4fa102406502905d3866e65bdebb985"
   integrity sha512-9S6m9Sukh1cZNknO1CWAr2QAWsbKLafQiyM5gZ7VgXHeuaoUwffKN4q6NC4A/Mf9iiPlOXQEKW/Mv/mh9/3YFA==
+
+disqus-react@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/disqus-react/-/disqus-react-1.1.5.tgz#e844d040eed8f55467106e49d00e29d629e07043"
+  integrity sha512-9fdG5m6c3wJzlCDLaMheuUagMVj3s5qgUSXdekpCsvzYOKG21AiuOoqyDzA0oXrpPnYzgpnsvPYqZ+i0hJPGZw==
 
 dns-packet@^5.2.2:
   version "5.6.1"
@@ -7793,6 +7805,13 @@ qs@6.11.0:
   dependencies:
     side-channel "^1.0.4"
 
+qs@^6.5.2:
+  version "6.13.0"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.13.0.tgz#6ca3bd58439f7e245655798997787b0d88a51906"
+  integrity sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==
+  dependencies:
+    side-channel "^1.0.6"
+
 queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
@@ -8609,7 +8628,7 @@ shelljs@^0.8.5:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-side-channel@^1.0.4:
+side-channel@^1.0.4, side-channel@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/side-channel/-/side-channel-1.0.6.tgz#abd25fb7cd24baf45466406b1096b7831c9215f2"
   integrity sha512-fDW/EZ6Q9RiO8eFG8Hj+7u/oW+XrPTIChwCOM2+th2A6OblDtYYIpve9m+KvI9Z4C9qSEXlaGR6bTEYHReuglA==
