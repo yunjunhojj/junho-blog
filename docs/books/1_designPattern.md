@@ -524,4 +524,533 @@ console.log(person2.getAge()); // 25
 
 > 모듈은 코드를 논리적인 단위로 분리하는 방법을 제공합니다. 모듈은 코드를 재사용하고 관리하기 쉽게 만들어줍니다.
 
+- 객체 리터럴 : 키와 값을 중괄호로 묶어 객체를 생성하는 방법
+
+```javascript
+const module = {
+  name: "John",
+  age: 30,
+  getName: function () {
+    return this.name;
+  },
+  getAge: function () {
+    return this.age;
+  },
+
+  sayHello: function () {
+    return `Hello, i am ${this.name} and i am ${this.age} years old.`;
+  },
+};
+
+console.log(module.getName()); // John
+console.log(module.getAge()); // 30
+console.log(module.sayHello()); // Hello, i am John and i am 30 years old.
+```
+
+- 모듈 패턴 : 모듈 패턴은 전통적인 소프트웨어 엔지니어링 분야에서 클래스의 캡슐화를 위해 처음 고안 되었습니다.
+- 비공개 : 모듈 패턴은 클로저(closure)를 사용하여 비공개 변수와 메서드를 만들 수 있습니다.
+
+```javascript
+const basket = [];
+
+const doSomethingPrivate = () => {
+  console.log("private");
+};
+
+const doSomething = () => {
+  console.log("public");
+};
+
+const basektModule = {
+  addItem(value) {
+    basket.push(value);
+  },
+
+  getItemCount() {
+    return basket.length;
+  },
+
+  doSomething() {
+    doSomethingPrivate();
+  },
+
+  getTotal() {
+    return basket.reduce((acc, cur) => acc + cur, 0);
+  },
+};
+
+export default basektModule;
+```
+
+- 모듈 가져오기 : 모듈을 가져오는 방법은 다음과 같습니다.
+
+```javascript
+import basketModule from "./basket.js";
+
+basketModule.addItem({ item: "apple", price: 10 });
+
+basketModule.addItem({ item: "banana", price: 5 });
+
+console.log(basketModule.getItemCount()); // 2
+console.log(basketModule.getTotal()); // 15
+```
+
+- 각 메서드는 외부에서 접근할 수 없습니다. 이는 클로저를 사용하여 비공개 변수와 메서드를 만들었기 때문입니다.
+- basket 변수는 외부에서 접근할 수 없습니다. 이는 클로저를 사용하여 비공개 변수를 만들었기 때문입니다. 오직 해당 모듈을 통해서만 접근할 수 있습니다.
+- 비공개 메서드인 doSomethingPrivate 메서드는 외부에서 접근할 수 없습니다.
+- 장점 : 모듈 패턴은 코드를 캡슐화하여 재사용성을 높이고 코드를 관리하기 쉽게 만들어줍니다.
+
+WeekMap을 사용하는 최신 모듈 패턴
+
+```javascript
+const module = (function () {
+  const privateData = new WeakMap();
+
+  class Module {
+    constructor() {
+      privateData.set(this, {
+        name: "John",
+        age: 30,
+      });
+    }
+
+    getName() {
+      return privateData.get(this).name;
+    }
+
+    getAge() {
+      return privateData.get(this).age;
+    }
+  }
+
+  return Module;
+})();
+
+const moduleInstance = new module();
+console.log(moduleInstance.getName()); // John
+console.log(moduleInstance.getAge()); // 30
+```
+
+- WeakMap : WeakMap은 키와 값을 가지는 객체를 저장하는 자료구조입니다. WeakMap은 키가 가비지 컬렉션의 대상이 될 수 있습니다. 참조하는 객체가 없을 경우 가비지 컬렉션의 대상이 됩니다.
+
+### 싱글턴 패턴
+
+> 싱글턴 패턴은 객체를 하나만 생성하여 전역적으로 사용하는 방법을 제공합니다.
+
+싱글턴 패턴은 정적 클래스나 객체와는 다르게 초기화를 지연시킬 수 있습니다. 왜냐하면 초기화 시점에 필요한 특정 정보가 유효하지 않을 수 있기 때문입니다.
+
+```javascript
+let instance = null;
+
+const privateData = new WeakMap();
+const privateMethod = () => {
+  console.log("private method");
+};
+
+class Singleton {
+  constructor() {
+    // 이미 인스턴스가 존재하면 인스턴스를 반환 -> 싱글턴 패턴
+    if (!instance) {
+      instance = this;
+    }
+
+    privateData.set(this, {
+      name: "John",
+      age: 30,
+    });
+
+    return instance;
+  }
+
+  getName() {
+    return privateData.get(this).name;
+  }
+
+  getAge() {
+    return privateData.get(this).age;
+  }
+
+  sayHello() {
+    privateMethod();
+    return `Hello, i am ${privateData.get(this).name} and i am ${
+      privateData.get(this).age
+    } years old.`;
+  }
+}
+
+export default Singleton;
+
+// 사용
+import Singleton from "./singleton.js";
+
+const instance1 = new Singleton();
+const instance2 = new Singleton();
+
+console.log(instance1 === instance2); // true
+console.log(instance1.getName()); // John
+console.log(instance1.getAge()); // 30
+console.log(instance1.sayHello()); // Hello, i am John and i am 30 years old.
+
+console.log(instance2.getName()); // John
+console.log(instance2.getAge()); // 30
+console.log(instance2.sayHello()); // Hello, i am John and i am 30 years old.
+```
+
+- 클래스의 인스턴스는 정확히 하나만 있어야 하며 눈에 잘 보이는 곳에 위치시켜 접근을 용이하게 해야 합니다.
+- 싱글톤의 인스턴스는 서브클래싱(subclassing)을 통해서만 확잘할 수 있고, 코드 수정 없이 확장된 인스턴스를 만들 수 있어야 합니다.
+
+### 리액트의 상태 관리
+
+> 리액트에서 상태 관리를 위해 Context API를 사용할 수 있습니다. Context API는 리액트 컴포넌트 트리 전체에 데이터를 제공하는 방법을 제공합니다.
+
+싱글턴은 만능이 아닙니다. 정말 필요한 경우에만 사용해야 합니다.
+
+### 프로토타입 패턴
+
+> 이미 존재하는 객체를 복사하여 새로운 객체를 생성하는 방법을 제공합니다. 프로토타입 패턴은 상속을 통해 객체를 생성하는 방법을 제공합니다.
+
+```javascript
+const person = {
+  name: "John",
+  age: 30,
+  getName() {
+    return this.name;
+  },
+  getAge() {
+    return this.age;
+  },
+};
+
+const person2 = Object.create(person);
+console.log(person2.getName()); // John
+console.log(person2.getAge()); // 30
+
+// 값을 추가하여 새로운 객체를 생성할 수 있습니다.
+const person3 = Object.create(person, {
+  name: {
+    value: "Jane",
+  },
+  age: {
+    value: 25,
+  },
+});
+
+console.log(person3.getName()); // Jane
+console.log(person3.getAge()); // 25
+```
+
+### 팩토리 패턴
+
+> 생성자를 필요로하지 않고, 필요한 타입의 객체를 생성하는 방법을 제공합니다.
+
+```javascript
+class Car {
+  constructor(options) {
+    this.doors = options.doors || 4;
+    this.state = options.state || "brand new";
+    this.color = options.color || "white";
+  }
+}
+
+class Truck {
+  constructor(options) {
+    this.doors = options.doors || 2;
+    this.state = options.state || "used";
+    this.color = options.color || "black";
+  }
+}
+
+class VehicleFactory {
+  createVehicle(options) {
+    if (options.vehicleType === "car") {
+      return new Car(options);
+    } else if (options.vehicleType === "truck") {
+      return new Truck(options);
+    }
+  }
+}
+
+const factory = new VehicleFactory();
+
+const car = factory.createVehicle({
+  vehicleType: "car",
+  color: "yellow",
+  doors: 6,
+});
+
+const truck = factory.createVehicle({
+  vehicleType: "truck",
+  color: "blue",
+  doors: 4,
+});
+
+console.log(car instanceof Car); // true
+console.log(car); // Car { doors: 6, state: 'brand new', color: 'yellow' }
+```
+
+장점
+
+- 객체나 컴포넌트의 생성 과정이 높은 복잡성을 가질 때
+- 상황에 따라 다양한 객체 인스턴스를 편리하게 생성할 때
+- 같은 속성을 공유하는 객체를 생성할 때
+- duck typing처럼 같은 api 규칙만 충족하면 되는 다른 객체를 생성할 때
+
+단점
+
+- 객체 생성 과정을 추상화하기 때문에 테스트하기 어려울 수 있습니다.
+- 프레임워크나 라이브러리 설계가 아니면 생성자를 사용하는 것이 더 좋을 수 있습니다.
+
+### 추상 팩토리 패턴
+
+> 추상 팩토리 패턴은 관련성 있는 객체를 생성하는 방법을 제공합니다. 추상 팩토리 패턴은 팩토리 패턴을 추상화하여 관련성 있는 객체를 생성하는 방법을 제공합니다.
+
+객체의 생성 과정에 영향을 받지 않아야 하거나 여러 타입의 객체로 작업해야 하는 경우에 추상 팩토리를 사용하면 좋습니다.
+
+```javascript
+class AbstractVehicleFactory {
+  constructor() {
+    this.types = {};
+  }
+
+  getVehicle(type, customizations) {
+    const Vehicle = this.types[type];
+    return new Vehicle(customizations);
+  }
+
+  registerVehicle(type, Vehicle) {
+    if (Vehicle.prototype.drive && Vehicle.prototype.breakDown) {
+      this.types[type] = Vehicle;
+    } else {
+      console.log("Vehicle is invalid");
+    }
+  }
+}
+
+const abstractVehicleFactory = new AbstractVehicleFactory();
+
+abstractVehicleFactory.registerVehicle("car", Car);
+abstractVehicleFactory.registerVehicle("truck", Truck);
+
+// 추상 차량 타입으로 새 자동차를 인스턴스화합니다.
+const car = abstractVehicleFactory.getVehicle("car", {
+  color: "lime green",
+  state: "like new",
+});
+
+// 비슷한 방법으로 트럭도 인스턴스화할 수 있습니다.
+const truck = abstractVehicleFactory.getVehicle("truck", {
+  wheelSize: "medium",
+  color: "neon yellow",
+});
+```
+
+### 구조 패턴
+
+> 구조 패턴은 클래스와 객체의 구성을 다룹니다. 상속의 개념을 활용하여 객체와 클래스를 조합하여 더 큰 구조를 만드는 방법을 제공합니다.
+
+- 퍼사드 패턴
+- 믹스인 패턴
+- 데코레이터 패턴
+- 플라이웨이트 패턴
+
+### 퍼사드 패턴
+
+> 퍼사드란 실제 모습을 숨기고 꾸며낸 겉모습만을 세상에 드러내는 것을 말합니다. 퍼사드 패턴은 복잡한 시스템을 단순하게 표현하는 방법을 제공합니다.
+
+대표적인 예로 jQuery가 있습니다. jQuery는 DOM 조작을 쉽게 하기 위해 퍼사드 패턴을 사용합니다.
+
+예를들 들어 jQuery의 `$(document).ready()`는 DOM이 준비되면 함수를 실행하는 방법을 제공합니다.
+
+```javascript
+const addCustomEvent = (el, ev, fn) => {
+  if (el.addEventListener) {
+    el.addEventListener(ev, fn, false);
+  } else if (el.attachEvent) {
+    el.attachEvent(`on${ev}`, fn);
+  } else {
+    el[`on${ev}`] = fn;
+  }
+};
+```
+
+jQuery의 `${document}.ready()`를 사용하여 이벤트를 추가할 수 있습니다.
+
+```javascript
+$(document).ready(() => {
+  const el = document.getElementById("myId");
+  addCustomEvent(el, "click", () => {
+    console.log("clicked");
+  });
+});
+```
+
+퍼스드 패턴의 장점은 내부의 복잡한 로직을 모르더라도 쉽게 사용할 수 있다는 것입니다.
+
+### 믹스인 패턴
+
+> C++나 다른 전통적인 프로그래밍 언어에서 믹스인은 서브클랙스가 쉽게 상속받아 기능을 재사용할 수 있도록 하는 클래스입니다.
+
+**서브클래싱이란?**
+
+- 부모 클래스 객체에서 속성을 상속받아 새로운 객체를 만드는 것을 뜻합니다.
+- 서브클래스의 메서드는 오버라이드된 부모 클래스의 메서드를 호출할 수 있습니다. (메서드 체이닝)
+- 마찬가지로 부모 클래스의 생성자를 호출할 수 있다 (생성자 체이닝)
+
+```javascript
+class Person {
+  constructor(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  sayHello() {
+    return `Hello, i am ${this.firstName} ${this.lastName}`;
+  }
+}
+
+class SuperHero extends Person {
+  constructor(firstName, lastName, superPower) {
+    // 부모 클래스의 생성자를 호출
+    super(firstName, lastName);
+    this.superPower = superPower;
+  }
+
+  usePower() {
+    return `${this.superPower}!`;
+  }
+}
+
+const superman = new SuperHero("Clark", "Kent", "Fly");
+```
+
+**믹스인 활용하기**
+
+- JS에서는 기능의 확장을 위해 믹스인의 상속을 이용한다.
+- 믹스인 은 다른 여러 클래스를 아울러 쉽게 공유할 수 있는 속성과 메서드를 가진 클래스 입니다.
+
+```javascript
+const MyMixin = (superclass) =>
+  class extends superclass {
+    moveUp() {
+      console.log("move up");
+    }
+
+    moveDown() {
+      console.log("move down");
+    }
+
+    stop() {
+      console.log("stop");
+    }
+  };
+
+class CarAnimator {
+  constructor() {
+    this.moveLeft = () => {
+      console.log("move left");
+    };
+  }
+}
+
+class PersonAnimator {
+  constructor() {
+    this.moveRandomly = () => {
+      console.log("move randomly");
+    };
+  }
+}
+
+class Car extends MyMixin(CarAnimator) {}
+
+class Person extends MyMixin(PersonAnimator) {}
+
+const car = new Car();
+const person = new Person();
+
+car.moveLeft();
+car.moveUp();
+car.stop();
+
+person.moveRandomly();
+person.moveDown();
+person.stop();
+```
+
+장점과 단점
+
+- 장점 : 함수의 중복을 줄이고, 코드의 재사용성을 높일 수 있습니다.
+- 단점 : 믹스인을 사용하면 코드의 복잡성이 증가할 수 있습니다. 그래서 안좋은 코드를 만들어 낼 수 있는 위험이 있는 패턴입니다. (출처를 알 수 없는 믹스인을 사용하면 코드의 추적이 어려워질 수 있습니다.)
+
+ex 리액트에서도 믹스인을 반대하고 대신 고차 컴포넌트(HOC) 혹은 Hooks를 사용합니다.
+
+### 데코레이터 패턴
+
+> 데코레이터 패턴은 객체에 추가적인 기능을 동적으로 첨가하는 방법을 제공합니다.
+
+```javascript
+class MacBook {
+  constructor() {
+    this.cost = 997;
+    this.screenSize = 11.6;
+  }
+
+  cost() {
+    return this.cost;
+  }
+
+  screenSize() {
+    return this.screenSize;
+  }
+}
+
+class Memory extends MacBook {
+  constructor(macbook) {
+    super();
+    this.macbook = macbook;
+  }
+
+  cost() {
+    return this.macbook.cost() + 75;
+  }
+}
+
+class Engraving extends MacBook {
+  constructor(macbook) {
+    super();
+    this.macbook = macbook;
+  }
+
+  cost() {
+    return this.macbook.cost() + 200;
+  }
+}
+
+class Insurance extends MacBook {
+  constructor(macbook) {
+    super();
+    this.macbook = macbook;
+  }
+
+  cost() {
+    return this.macbook.cost() + 250;
+  }
+}
+
+let mb = new MacBook();
+
+mb = new Memory(mb);
+mb = new Engraving(mb);
+mb = new Insurance(mb);
+
+console.log(mb.cost()); // 1522
+console.log(mb.screenSize()); // 11.6
+```
+
+### 플라이웨이트 패턴
+
+> 반복되고 느리고 비효율적으로 데이터를 공유하는 것을 방지하기 위해 객체를 공유하는 방법을 제공합니다. 연관성이 있는 객체를 공유하여 메모리 사용을 최적화하는 방법을 제공합니다.
+
+```javascript
+
 </details>
+```
