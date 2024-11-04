@@ -9,7 +9,7 @@ export const CommentSection = () => {
   const textColor = colorMode === "dark" ? "white" : "black";
 
   useEffect(() => {
-    const box = commentBox("<replace with your id>", {
+    const box = commentBox("5666142676844544-proj", {
       textColor: textColor,
     });
     return () => box();
