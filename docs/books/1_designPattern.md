@@ -1050,4 +1050,51 @@ console.log(mb.screenSize()); // 11.6
 
 > 반복되고 느리고 비효율적으로 데이터를 공유하는 것을 방지하기 위해 객체를 공유하는 방법을 제공합니다. 연관성이 있는 객체를 공유하여 메모리 사용을 최적화하는 방법을 제공합니다.
 
+```javascript
+class IceCream {
+  constructor(flavor, price) {
+    this.flavor = flavor;
+    this.price = price;
+  }
+}
+
+class IceCreamFactory {
+  constructor() {
+    this._iceCreams = [];
+  }
+
+  create(flavor, price) {
+    let iceCream = this.getIceCream(flavor);
+    if (iceCream) {
+      return iceCream;
+    } else {
+      const newIceCream = new IceCream(flavor, price);
+      this._iceCreams.push(newIceCream);
+      return newIceCream;
+    }
+  }
+
+  getIceCream(flavor) {
+    return this._iceCreams.find((iceCream) => iceCream.flavor === flavor);
+  }
+}
+
+const factory = new IceCreamFactory();
+
+const ice1 = factory.create("chocolate", 1);
+const ice2 = factory.create("vanilla", 2);
+const ice3 = factory.create("chocolate", 1);
+
+console.log(ice1 === ice3); // true
+```
+
+장점
+
+- 메모리 사용을 최적화할 수 있습니다.
+- 객체를 재사용하여 성능을 향상시킬 수 있습니다.
+
+단점
+
+- 객체를 공유하기 때문에 객체의 상태가 변경되면 다른 객체에 영향을 줄 수 있습니다.
+
 </details>
