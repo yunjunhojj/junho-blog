@@ -25,8 +25,8 @@
 <details>
   <summary>ch1 자바스크립트</summary>
 
-자바스크립트에 마스터는 없습니다. 더 익숙해지고 친해질 수 있습니다.
-이 책은 자바스크립트와 가까워지기 위한 여행이 될 것 입니다.
+> 자바스크립트에 마스터는 없습니다. 더 익숙해지고 친해질 수 있습니다.
+> 이 책은 자바스크립트와 가까워지기 위한 여행이 될 것 입니다.
 
 ## 1.1 책에 대하여
 
@@ -277,3 +277,288 @@ function foo() {
 - JS는 컴파일 처리되는 언어입니다. (파싱, 컴파일, 실행 단계를 거칩니다.)
 
 </details>
+
+<details>
+  <summary>ch2 자바스크립트 조망하기</summary>
+
+> 가장 좋은 JS 학습 방법은 직접 코드를 작성해보는 것입니다.
+
+## 2.1 파일은 프로그램입니다.
+
+JS 파일을 하나의 프로그램이라고 생각해야합니다. 이런 마인드를 가져야하는 이유는 주로 오류 처리 때문입니다.
+
+JS 파일을 모듈로 분리하고 이러한 모듈들의 조합으로 하나의 프로그램을 만들고, 빌드 도구를 사용해 하나의 파일로 만들어서 배포합니다.
+
+그러므로 모듈 하나하나를 독립적인 작은 프로그램으로 생각하고, 이 프로그램들을 조합해 하나의 큰 프로그램을 만들어야합니다.
+
+## 2.2 값
+
+JS에서 값은 원시타입(Primitive Type)과 객체타입(Object Type)으로 나뉩니다.
+
+### 원시타입
+
+> 템플릿 리터럴은 문자열을 보다 편리하게 작성할 수 있도록 도와줍니다.
+
+아래 코드는 다양한 string 표현 방법을 보여줍니다.
+
+```javascript
+let name = "world";
+let greeting = `Hello, ${name}!`;
+console.log(greeting); // Hello, world!
+console.log("Hello, " + name + "!"); // Hello, world!
+console.log("Hello, " + name + "!"); // Hello, world!
+```
+
+- 템플릿 리터럴은 백틱(`)을 사용합니다. 변수를 ${}로 감싸서 사용합니다. 그냥 일반 string은 ""나 ''를 사용합니다.
+- boolean은 true, false로 표현합니다.
+- 매우 큰 정수를 표현할 때에는 BigInt를 사용합니다. (ex. 2n)
+- null은 값이 없음을 나타내는 원시값입니다. (typeof null은 object입니다.)
+- undefined는 값이 할당되지 않음을 나타내는 원시값입니다. (typeof undefined는 undefined입니다.)
+- NaN은 숫자가 아님을 나타내는 원시값입니다. (typeof NaN은 number입니다.)
+- symbol은 유일한 값을 나타내는 원시값입니다. (typeof symbol은 symbol입니다.)
+
+### 배열과 객체
+
+배열과 객체는 원시값과 달리 여러 값을 담을 수 있습니다.
+
+```javascript
+let arr = [1, 2, 3];
+let obj = { a: 1, b: 2, c: 3 };
+
+// 배열 안에는 다양한 타입의 값이 들어갈 수 있습니다.
+// 객체, 배열, 함수 등 모든 타입이 들어갈 수 있습니다.
+let mixed = [1, "two", [3], { four: 4 }, () => 5];
+
+// 객체에 접근하는 방법
+console.log(obj.a); // 1
+console.log(obj["a"]); // 1
+```
+
+### 다시 한번 정리하는 값의 타입
+
+```
+typeof 42; // "number"
+typeof "abc"; // "string"
+typeof true; // "boolean"
+typeof undefined; // "undefined"
+typeof null; // "object" <- null은 object로 나옵니다. 주의
+typeof {}; // "object"
+typeof []; // "object" <- 배열은 object로 나옵니다. 주의
+typeof function () {}; // "function"
+```
+
+### 변수 선언과 사용
+
+변수는 값을 담는 상자입니다. 변수를 선언할 때에는 let, const, var 키워드를 사용합니다.
+
+- let : 재할당이 가능한 변수를 선언합니다. 블록 스코프입니다.
+- const : 재할당이 불가능한 변수를 선언합니다. 블록 스코프입니다.
+- var : let과 비슷하지만, 스코프가 함수 스코프입니다.
+
+```javascript
+// 할당 예시 코드
+let x = 10;
+const y = 20;
+var z = 30;
+
+x = 15; // 재할당 가능
+y = 25; // 재할당 불가능
+z = 35; // 재할당 가능
+
+console.log(x, y, z); // 15 20 35
+
+// 스코프 예시 코드
+if (true) {
+  let a = 10;
+  const b = 20;
+  var c = 30;
+}
+
+console.log(a); // ReferenceError: a is not defined
+console.log(b); // ReferenceError: b is not defined
+console.log(c); // 30
+```
+
+</details>
+
+<details>
+  <summary>ch3 자바스크립트 뿌리 파헤치기</summary>
+
+## 3.1 이터레이션
+
+이터레이션은 반복을 의미합니다. JS에서는 이터레이션을 위해 다양한 방법을 제공합니다.
+
+JavaScript에서 반복자(Iterator)는 시퀀스를 정의하고 종료시의 반환값을 잠재적으로 정의하는 객체입니다. 더 구체적으로 말하자면, 반복자는 두 개의 속성( value, done)을 반환하는 next() 메소드 사용하여 객체의 Iterator protocol을 구현합니다. 시퀀스의 마지막 값이 이미 산출되었다면 done 값은 true 가 됩니다. 만약 value값이 done 과 함께 존재한다면, 그것은 반복자의 반환값이 됩니다.
+
+```javascript
+function makeRangeIterator(start = 0, end = Infinity, step = 1) {
+  var nextIndex = start;
+  var n = 0;
+
+  var rangeIterator = {
+    next: function () {
+      var result;
+      if (nextIndex < end) {
+        result = { value: nextIndex, done: false };
+      } else if (nextIndex == end) {
+        result = { value: n, done: true };
+      } else {
+        result = { done: true };
+      }
+      nextIndex += step;
+      n++;
+      return result;
+    },
+  };
+  return rangeIterator;
+}
+```
+
+위 처럼 이터레이터를 만들 수 있습니다. 그러나 보통 generator를 사용합니다.
+
+```javascript
+function* makeRangeIterator(start = 0, end = Infinity, step = 1) {
+  let n = 0;
+  for (let i = start; i < end; i += step) {
+    yield i;
+    n++;
+  }
+  return n;
+}
+
+let it = makeRangeIterator(0, 10, 2);
+console.log(it.next()); // { value: 0, done: false }
+console.log(it.next()); // { value: 2, done: false }
+console.log(it.next()); // { value: 4, done: false }
+```
+
+생성자 함수가 최초로 호출될 때, 함수 내부의 어떠한 코드도 실행되지 않고, 대신 생성자라고 불리는 반복자 타입을 반환합니다. 생성자의 next 메소드를 호출함으로서 어떤 값이 소비되면, 생성자 함수는 yield 키워드를 만날 때까지 실행됩니다.
+
+### 이터레이터 사용하기 (for...of)
+
+> 객체는 값이 for..of 구조 내에서 반복되는 것 같은 그 반복 동작을 정의하는 경우 반복이 가능(iterable)합니다. Array 또는 Map과 같은 일부 내장 형은 기본 반복 동작이 있지만 다른 형(가령 Object)은 없습니다.
+
+```javascript
+let arr = [1, 2, 3];
+
+for (let value of arr) {
+  console.log(value);
+}
+```
+
+for...of 말고도 다양한 반복문이 있습니다.
+
+- for...in : 객체의 열거 가능한 속성을 반복합니다.
+- forEach : 배열의 각 요소에 대해 함수를 실행합니다.
+- map : 배열의 각 요소에 대해 함수를 실행하고, 결과를 새로운 배열로 반환합니다.
+- filter : 배열의 각 요소에 대해 함수를 실행하고, 결과가 true인 요소만을 새로운 배열로 반환합니다.
+- reduce : 배열의 각 요소에 대해 함수를 실행하고, 하나의 결과값을 반환합니다.
+- spread : 배열을 펼쳐서 전달합니다. (ex. Math.max(...arr))
+
+### 이터러블
+
+js에서 이터러블한 자료형은 문자열, 배열, 맵, 셋 등이 있습니다.
+
+## 3.2 클로저
+
+클로저는 함수와 함수가 선언된 렉시컬 환경의 조합입니다. 렉시컬 환경은 함수가 정의될 때의 환경을 말합니다.
+
+```javascript
+function addCounter() {
+  let count = 0;
+  return function () {
+    count++;
+    return count;
+  };
+}
+
+let counter = addCounter();
+console.log(counter()); // 1
+console.log(counter()); // 2
+console.log(counter()); // 3
+
+let counter2 = addCounter();
+console.log(counter2()); // 1
+console.log(counter2()); // 2
+console.log(counter2()); // 3
+```
+
+위 코드는 클로저를 사용한 예시입니다. makeAdder 함수는 클로저를 반환합니다. 이 클로저는 x를 기억하고 있습니다.
+
+클로저는 함수가 선언될 때의 렉시컬 환경을 기억합니다. 이 덕분에 함수가 선언될 때의 환경을 기억하고, 이후에도 그 환경을 사용할 수 있습니다.
+
+## this
+
+this는 함수가 호출될 때 결정됩니다. this는 함수가 호출될 때, 함수를 호출한 객체를 참조합니다. (동적 바인딩)
+
+<!-- 실행컨텍스트로 설명  -->
+
+this가 가르키는 것은 실행 컨텍스트에 따라 달라집니다. 근데 실행 컨텍스트는 다음과 같은 순서로 결정됩니다.
+
+1. 함수 호출 시점
+2. 함수 호출 방식
+3. 함수 호출 위치
+
+```javascript
+function classroom(teacher) {
+  return function study() {
+    console.log(`${teacher} is teaching, ${this.student} is studying`);
+  };
+}
+
+let assignment = classroom("Kyle");
+assignment(); // Kyle is teaching, undefined is studying (this는 전역 객체를 가르킵니다.)
+
+let workshop = {
+  student: "Sally",
+  assignment,
+};
+
+workshop.assignment(); // Kyle is teaching, Sally is studying (this는 workshop 객체를 가르킵니다.)
+
+let workshop2 = {
+  student: "Billy",
+  assignment: assignment.bind({ student: "jane" }),
+};
+
+workshop2.assignment(); // Kyle is teaching, jane is studying (this는 jane을 가르킵니다.)
+```
+
+## prototype
+
+모든 객체는 프로토타입을 가지고 있습니다. 프로토타입은 객체의 부모 역할을 합니다.
+
+두 객체를 연결하는 연결 장치 입니다. 연결된 객체는 프로토타입 체인을 통해 서로 연결됩니다.
+
+```javascript
+let obj = { a: 1 };
+
+let obj2 = Object.create(obj);
+
+console.log(obj2.a); // 1
+```
+
+그러나 프로토타입을 조작하는 것은 권장되지 않습니다. 라이브러리에서 충돌이 발생할 수 있습니다.
+
+### this + prototype
+
+this와 prototype를 함께 사용하면, 객체의 메서드를 정의할 수 있습니다.
+
+```javascript
+function Workshop(teacher) {
+  this.teacher = teacher;
+}
+
+Workshop.prototype.ask = function (question) {
+  console.log(this.teacher, question);
+};
+
+let deepJS = new Workshop("Kyle");
+let reactJS = new Workshop("Suzy");
+
+deepJS.ask("Is 'prototype' a class?"); // Kyle Is 'prototype' a class?
+reactJS.ask("Isn't 'prototype' ugly?"); // Suzy Isn't 'prototype' ugly?
+```
+
+</details>
+```
