@@ -20,7 +20,7 @@
 - 요약 : 매주 하루, 2명 발표, 둘이 각각 1장(챕터) 발표
 - 특이사항 : 짧은 챕터는 한명이 2장을 발표하겠습니다.
 
-## Intro
+## Intro & part 1
 
 <details>
   <summary>ch1 자바스크립트</summary>
@@ -561,4 +561,244 @@ reactJS.ask("Isn't 'prototype' ugly?"); // Suzy Isn't 'prototype' ugly?
 ```
 
 </details>
+
+## part 2
+
+> 2부에서는 스코프 시스템과 클로저를 비롯해 모듈 디자인 패턴에 대해 다룹니다.
+
+<details>
+  <summary>ch1 스코프</summary>
+
+이전에 JS는 실행 전 별도의 단계에서 파싱, 컴파일이 일어난다고 했었습니다. (v8 엔진)
+
+## 컴파일러 vs 인터프리터
+
+목적으로는 둘 다 "개발자가 작성한 코드를 기계가 이해할 수 있는 형태로 변환하는 것" 입니다.
+
+- 컴파일러 : 코드를 한 번에 컴파일하고 변환합니다. (ex. C, C++)
+- 인터프리터 : 코드를 한 줄씩 읽어가며 변환합니다. (ex. JS, Python)
+
+## js 컴파일 과정
+
+1. 토크나이징/렉싱 (Tokenizing/Lexing) : 문자열을 token이라는 의미 있는 조각으로 변환합니다. (ex. let a = 2; -> let, a, =, 2, ;)
+
+2. 파싱 (Parsing) : token을 AST(Abstract Syntax Tree)로 변환합니다.
+   파싱을 거치면 변수 선언, 식별자, 할당식, 숫자 리터럴 등을 나타내는 노드로 이루어진 트리가 만들어집니다.
+   (ex. let a = 2; -> { type: 'VariableDeclaration', name: 'a', value: { type: 'NumericLiteral', value: 2 } })
+
+3. 코드 생성 : AST를 기계어로 변환합니다. 이는 언어 혹은 목표하는 플랫폼 등에 따라 크게 달라집니다.
+
+근데 js는 충분한 시간을 갖고 컴파일 하는 것이 아닙니다. 그렇기 때문에 성능을 보장하기 위해서 여러가지 스킬을 사용합니다. (ex. JIT 컴파일, Just-In-Time Compilation)
+
+## 필수 두 단계 (파싱, 컴파일)
+
+JS의 세가지 특징으로 컴파일 필요성을 입증 할 수 있습니다.
+
+1. 구문 오류 : 코드를 실행하기 전에 구문 오류를 찾아내야합니다.
+2. 초기 오류 : 코드를 실행하기 전에 오류를 찾아내야합니다.
+3. 호이스팅 : 변수와 함수 선언을 끌어올립니다.
+
+```javascript
+// 구문오류 (SyntaxError)
+var greeting = "Hello, World!";
+console.log(greeting);
+greeting = ."Hello, World!";
+// SyntaxError: Unexpected token '.'
+```
+
+> 콘솔이 안 찍히고 syntax error가 발생합니다. -> 컴파일 단계에서 구문 오류를 찾아내는 것입니다.
+
+```javascript
+// 초기오류 (ReferenceError)
+console.log("Hello, World!");
+
+saySomething("hi!", "Kyle");
+// Uncaught SyntaxError: Duplicate parameter name not allowed in this context
+
+function saySomething(greeting, greeting) {
+  "use strict"; // 없으면 에러가 발생하지 않습니다.
+  console.log(greeting);
+}
+```
+
+> saySomething 함수를 호출하기 전에 선언되어 있지 않아서 ReferenceError가 발생합니다. -> 컴파일 단계에서 초기 오류를 찾아내는 것입니다.
+
+```javascript
+function sayHello() {
+  var greeting = "Hello, World!";
+  {
+    greeting = "Hello, Kyle!"; // 에러가 발생합니다.
+    let greeting = "Hello, Kyle!";
+    console.log(greeting);
+  }
+}
+
+sayHello();
+// ReferenceError: Cannot access 'greeting' before initialization
+```
+
+> greeting 변수를 선언하기 전에 사용했기 때문에 ReferenceError가 발생합니다. -> 호이스팅을 통해 변수와 함수 선언을 끌어올리는 것입니다.
+
+## 컴파일러 체계
+
+> 컴파일러 된다는 것을 이해했다면, 이제 변수 식별과 스코프 결정에 대해 알아보겠습니다.
+
+```javascript
+var teacher = [
+  { id: 1, name: "Kyle" },
+  { id: 2, name: "Suzy" },
+  { id: 3, name: "Frank" },
+];
+
+function getTeacherById(id) {
+  for (let i = 0; i < teacher.length; i++) {
+    if (teacher[i].id === id) {
+      return teacher[i];
+    }
+  }
+  return "No teacher found";
+}
+
+var result = getTeacherById(1);
+
+console.log(result);
+// { id: 1, name: 'Kyle' }
+```
+
+선언을 제외한다면 프로그램 내 모든 변수와 식별자는 **타깃**이나 값의 **소스**로 사용됩니다. (LHS, RHS)
+
+### 타깃과 소스
+
+```javascript
+student = ["Kyle", "Suzy", "Frank"];
+```
+
+- student : 타깃
+- ["Kyle", "Suzy", "Frank"] : 소스
+
+```javascript
+for (let student of students) {
+  console.log(student);
+}
+```
+
+- student : 타깃
+- students : 소스
+
+```javascript
+getTeacherById(1);
+```
+
+- getTeacherById : 타깃
+- 1 : 소스
+
+```javascript
+function getTeacherById(id) {
+  for (let i = 0; i < teacher.length; i++) {
+    if (teacher[i].id === id) {
+      return teacher[i];
+    }
+  }
+  return "No teacher found";
+}
+```
+
+- id : 타깃
+- teacher.length : 소스
+
+### 런타임에 스코프 변경하기
+
+> 일반적으로 스코프는 프로그램이 컴파일될 때 결정되고, 런타임에 변경되지 않습니다.
+
+두가지 방법으로 런타임에 스코프를 변경할 수 있습니다.
+
+1. eval : 문자열을 코드로 실행합니다. (eval 함수)
+2. with : 객체의 속성을 스코프로 사용합니다. (with 문)
+
+```javascript
+var teacher = { name: "Kyle" };
+
+with (teacher) {
+  console.log(name);
+}
+```
+
+위 코드는 with 문을 사용하여 런타임에 스코프를 변경하는 예시입니다.
+
+근데 둘 다 사용하지 않는 것이 좋습니다. eval은 코드를 실행할 때 보안 문제가 발생할 수 있고, with는 성능 문제가 발생할 수 있습니다.
+
+### 렉시컬 스코프
+
+위에서 설명한 스코프 결정 방식은 렉시컬 스코프입니다. 렉시컬 스코프는 함수를 어디서 호출했는지가 아니라, 어디서 선언했는지에 따라 결정됩니다. (렉싱)
+
+컴파일레이션은 스코프와 변수의 메모리 예약 관점에서 실제로는 아무것도 하지 않습니다. 왜냐하면 컴파일레이션 과정에서는 어떤 프로그램도 실행되지 않기 때문입니다.
+
+</details>
+
+<details>
+  <summary>ch2 렉시컬 스코프</summary>
+
+- Scope : 변수에 접근할 수 있는 범위
+- Global Scope : 전역 범위
+- Local Scope : 지역 범위
+
+```javascript
+// Define a variable in the global scope:
+const fullName = "Oluwatobi Sofela";
+
+// Define nested functions:
+function profile() {
+  function sayName() {
+    function writeName() {
+      return fullName;
+    }
+    return writeName();
+  }
+  return sayName();
+}
+```
+
+- fullName : Global Scope -> 어디서든 접근 가능
+- profile : Local Scope -> sayName, writeName에 접근 가능
+- sayName : Local Scope -> writeName에 접근 가능
+- writeName : Local Scope -> fullName에 접근 가능
+
+> writeName 함수가 호출될 때, 바로 글로벌 스코프에서 fullName을 찾지 않고, fullName을 찾을 때까지 스코프 체인을 따라 올라갑니다.
+
+### 스코프 체인
+
+- 스코프 체인 : 함수가 선언될 때의 스코프를 기억합니다. 이를 통해 함수가 호출될 때 스코프를 찾을 수 있습니다.
+
+fullName이 writeName 함수에서 찾을 때, writeName() scope -> sayName() scope -> profile() scope -> Global scope 순으로 찾습니다.
+
+ex. 함수가 선언될 때의 스코프를 기억한다.
+
+```javascript
+// First fullName variable defined in the global scope:
+const fullName = "Oluwatobi Sofela";
+
+// Nested functions containing two more fullName variables:
+function profile() {
+  const fullName = "Tobi Sho";
+  function sayName() {
+    const fullName = "Oluwa Sofe";
+    function writeName() {
+      return fullName;
+    }
+    return writeName();
+  }
+  return sayName();
+}
+
+console.log(profile()); // Oluwa Sofe
+```
+
+### 렉시컬(lexical) 의미
+
+렉시컬이란 : 단어, 표현, 변수를 만드는 것과 관련된 모든 것을 의미합니다.
+
+</details>
+
+```
+
 ```
