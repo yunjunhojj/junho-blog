@@ -584,7 +584,8 @@ reactJS.ask("Isn't 'prototype' ugly?"); // Suzy Isn't 'prototype' ugly?
 
 2. 파싱 (Parsing) : token을 AST(Abstract Syntax Tree)로 변환합니다.
    파싱을 거치면 변수 선언, 식별자, 할당식, 숫자 리터럴 등을 나타내는 노드로 이루어진 트리가 만들어집니다.
-   (ex. let a = 2; -> { type: 'VariableDeclaration', name: 'a', value: { type: 'NumericLiteral', value: 2 } })
+
+   `(ex. let a = 2; -> { type: 'VariableDeclaration', name: 'a', value: { type: 'NumericLiteral', value: 2 } })`
 
 3. 코드 생성 : AST를 기계어로 변환합니다. 이는 언어 혹은 목표하는 플랫폼 등에 따라 크게 달라집니다.
 
@@ -798,7 +799,3 @@ console.log(profile()); // Oluwa Sofe
 렉시컬이란 : 단어, 표현, 변수를 만드는 것과 관련된 모든 것을 의미합니다.
 
 </details>
-
-```
-
-```
