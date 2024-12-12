@@ -799,3 +799,231 @@ console.log(profile()); // Oluwa Sofe
 렉시컬이란 : 단어, 표현, 변수를 만드는 것과 관련된 모든 것을 의미합니다.
 
 </details>
+
+<details>
+  <summary>ch5 변수의 비밀 생명주기</summary>
+
+> 간단히 보자면, 호이스팅에 대해 알아보겠습니다.
+
+## 변수 사용 가능 시점
+
+호이스팅이란 : 자바스크립트에서 호이스팅(Hoisting)이란 변수 선언과 함수 선언이 해당 스코프의 최상단으로 끌어올려지는 것처럼 동작하는 개념을 의미한다. 실제 코드가 재배치되는 것은 아니지만, 자바스크립트 엔진의 해석 과정에서 변수와 함수의 선언부를 먼저 등록하고 이후에 코드를 실행한다. 이로 인해 코드 상에서 선언문보다 위에서 해당 변수나 함수를 참조할 수 있는 것처럼 보인다.
+
+```javascript
+greeting(); // Hello, World!
+
+function greeting() {
+  console.log("Hello, World!");
+}
+```
+
+위 코드는 함수 선언문을 사용한 예시입니다. 함수 선언문은 호이스팅이 일어나기 때문에 함수 선언문을 사용하면 함수를 선언하기 전에 호출할 수 있습니다.
+
+```javascript
+greeting(); // TypeError: greeting is not a function
+
+var greeting = function () {
+  console.log("Hello, World!");
+};
+```
+
+위 코드는 함수 표현식을 사용한 예시입니다. 함수 표현식은 호이스팅이 일어나지 않기 때문에 함수 표현식을 사용하면 함수를 선언하기 전에 호출할 수 없습니다.
+
+typeError가 발생하는 이유는 변수 선언은 호이스팅이 일어나지만, 할당은 호이스팅이 일어나지 않기 때문입니다. var greeting;가 호이스팅 되어 undefined로 초기화되고, greeting()을 호출하면 undefined()이 되어 typeError가 발생합니다.
+
+```javascript
+greeter = "Hello, World!";
+console.log(greeter); // Hello, World!
+
+var greeter = "hello";
+```
+
+- 식별자 greeter는 호이스팅이 일어나지만, 할당은 호이스팅이 일어나지 않습니다.
+
+## 비유된 코드로 이해하기
+
+```javascript
+var greeter;
+greeter = "Hello, World!";
+console.log(greeter); // Hello, World!
+greeter = "hello";
+```
+
+위 코드는 호이스팅이 일어나는 코드를 비유한 코드입니다.
+
+## 중복 선언 처리하기
+
+```javascript
+var student = "Kyle";
+console.log(student); // Kyle
+
+var student;
+console.log(student); // Kyle
+```
+
+- 두번째 console.log에서도 Kyle이 출력되는 이유는 변수 선언은 호이스팅이 일어나지만, 할당은 호이스팅이 일어나지 않기 때문입니다.
+
+아래는 비유한 코드입니다.
+
+```javascript
+var student;
+var student; // 두번째 선언은 무시됩니다.
+
+student = "Kyle";
+console.log(student); // Kyle
+
+console.log(student); // Kyle
+```
+
+### let과 const는 중복 선언을 허용하지 않습니다.
+
+```javascript
+let student = "Kyle";
+
+console.log(student); // Kyle
+
+let student = "Suzy"; // SyntaxError: Identifier 'student' has already been declared
+```
+
+둘중 하나가 var로 선언되어 있어도 SyntaxError가 발생합니다.
+
+```javascript
+var student = "Kyle";
+let student = "Suzy";
+```
+
+const 재선언
+
+```javascript
+const student; // SyntaxError: Missing initializer in const declaration
+```
+
+- const는 선언과 동시에 초기화를 해야합니다.
+
+```javascript
+const student = "Kyle";
+console.log(student); // Kyle
+
+const student = "Suzy"; // SyntaxError: Identifier 'student' has already been declared
+```
+
+> syntaxError vs typeError : syntaxError는 코드를 실행하기 전에 발생하는 오류이고, typeError는 코드를 실행하는 중에 발생하는 오류입니다.
+
+반복문 안에서 var를 사용하면, var는 함수 스코프이기 때문에 반복문이 끝난 후에도 변수가 남아있습니다.
+
+```javascript
+for (var i = 0; i < 3; i++) {
+  console.log(i);
+}
+
+console.log(i); // 3
+```
+
+let을 사용하면 블록 스코프이기 때문에 반복문이 끝나면 변수가 사라집니다.
+
+```javascript
+for (let i = 0; i < 3; i++) {
+  console.log(i);
+}
+
+console.log(i); // ReferenceError: i is not defined
+```
+
+```javascript
+for (const i = 0; i < 3; i++) {
+  // i++ 시도 시 TypeError 발생: i는 상수로 재할당 불가
+  console.log(i);
+}
+```
+
+- const는 재할당이 불가능하기 때문에 i++을 시도하면 TypeError가 발생합니다.
+
+```javascript
+const arr = [10, 20, 30];
+for (const val of arr) {
+  console.log(val); // 10, 20, 30 출력
+}
+```
+
+- 이 경우 각 반복마다 val이 새롭게 바인딩되어 재할당이 아니라 새로운 값으로 대체되는 상황이므로 에러 없이 동작한다.
+
+### 초기화되지 않은 변수와 TDZ
+
+```javascript
+console.log(student); // ReferenceError: Cannot access 'student' before initialization
+
+let student = "Kyle";
+```
+
+- let과 const는 호이스팅이 일어나지만, 초기화가 일어나기 전에 접근하면 ReferenceError가 발생합니다.
+
+```javascript
+console.log(student); // undefined
+
+var student = "Kyle";
+```
+
+let의 초기값
+
+```javascript
+let student;
+console.log(student); // undefined
+
+student = "Kyle";
+console.log(student); // Kyle
+```
+
+TDZ(Temporal Dead Zone) : 변수가 선언되기 전에 접근하면 ReferenceError가 발생하는 것을 의미합니다.
+
+> 엄밀하게 말하면, var도 TDZ가 존재하지만 길이가 0이기 때문에 무시됩니다.
+
+TDZ를 위치보다는 시간대로 생각하면 이해하기 쉽습니다.
+
+```javascript
+askTeacher(); // ReferenceError: Cannot access 'askTeacher' before initialization ? null, can I ask a question?
+
+let student = "Kyle";
+
+function askTeacher() {
+  console.log(`${student}, can I ask a question?`);
+}
+```
+
+let과 const 가 호이스팅 요약
+
+```javascript
+// let 변수 호이스팅 증명
+try {
+  console.log(myLet); // 아직 초기화 전이므로 ReferenceError 발생
+} catch (e) {
+  console.log("let 변수 참조 에러:", e.message);
+}
+let myLet = "let 변수";
+console.log("선언 후 참조:", myLet); // 여기서는 정상 출력
+
+// const 변수 호이스팅 증명
+try {
+  console.log(myConst); // 역시 초기화 전이므로 ReferenceError 발생
+} catch (e) {
+  console.log("const 변수 참조 에러:", e.message);
+}
+const myConst = "const 변수";
+console.log("선언 후 참조:", myConst); // 여기서는 정상 출력
+```
+
+쉐도잉으로 호이스팅 확인하기
+
+```javascript
+var student = "Kyle";
+
+{
+  console.log(student); // ReferenceError: Cannot access 'student' before initialization
+  let student = "Suzy";
+
+  console.log(student); // Suzy
+}
+```
+
+> 조언 : 변수 선언을 최상단에 위치시키고, 변수를 사용하기 전에 선언하면 호이스팅에 대해 걱정하지 않아도 됩니다. -> 당연한 소리;;;
+
+</details>
