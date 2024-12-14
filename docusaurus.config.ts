@@ -140,7 +140,16 @@ const config: Config = {
           position: "left",
           label: "Tutorial",
         },
-        { to: "/blog", label: "Blog", position: "left" },
+        {
+          to: "/blog",
+          label: "Blog",
+          position: "left",
+          showSearch: true,
+          showReadingTime: true,
+          readingTime: ({ content, frontMatter, defaultReadingTime }) =>
+            defaultReadingTime({ content, options: { wordsPerMinute: 300 } }),
+        },
+
         {
           to: "/docs/toolbox/intro",
           label: "Toolbox",
