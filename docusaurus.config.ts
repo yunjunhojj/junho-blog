@@ -130,6 +130,12 @@ const config: Config = {
       items: [
         {
           type: "docSidebar",
+          sidebarId: "computerScienceSidebar",
+          position: "left",
+          label: "Computer Science",
+        },
+        {
+          type: "docSidebar",
           sidebarId: "tutorialSidebar",
           position: "left",
           label: "Tutorial",
