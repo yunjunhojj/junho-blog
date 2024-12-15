@@ -160,11 +160,11 @@ const config: Config = {
           label: "Books",
           position: "left",
         },
-        {
-          href: "https://www.github.com/yunjunhojj",
-          label: "GitHub",
-          position: "right",
-        },
+        // {
+        //   href: "https://www.github.com/yunjunhojj",
+        //   label: "GitHub",
+        //   position: "right",
+        // },
       ],
     },
     footer: {
