@@ -66,7 +66,6 @@ const config: Config = {
           sidebarPath: "./sidebars.ts",
         },
         blog: {
-          showReadingTime: true,
           feedOptions: {
             type: ["rss", "atom"],
             xslt: true,
@@ -144,8 +143,6 @@ const config: Config = {
           to: "/blog",
           label: "Blog",
           position: "left",
-          showSearch: true,
-          showReadingTime: true,
           readingTime: ({ content, frontMatter, defaultReadingTime }) =>
             defaultReadingTime({ content, options: { wordsPerMinute: 300 } }),
         },
