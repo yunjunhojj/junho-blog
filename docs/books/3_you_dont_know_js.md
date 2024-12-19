@@ -1027,3 +1027,170 @@ var student = "Kyle";
 > 조언 : 변수 선언을 최상단에 위치시키고, 변수를 사용하기 전에 선언하면 호이스팅에 대해 걱정하지 않아도 됩니다. -> 당연한 소리;;;
 
 </details>
+
+<details>
+  <summary>ch7 클로저 사용법</summary>
+
+## 클로저 관찰하기
+
+클로저는 함수에서만 일어나는 현상입니다. 객체와 클래스는 클로저를 만들지 않습니다.
+
+```javascript
+function lookupStudent(studentID) {
+  var students = [
+    { id: 1, name: "Kyle" },
+    { id: 2, name: "Suzy" },
+  ];
+
+  return function greet(message) {
+    var student = students.find((student) => student.id === studentID);
+    return `${message}, ${student.name}!`;
+  };
+}
+
+var studentGreeter = lookupStudent(1);
+console.log(studentGreeter("Hello"));
+// Hello, Kyle!
+
+var studentGreeter2 = lookupStudent(2);
+console.log(studentGreeter2("Hi"));
+// Hi, Suzy!
+```
+
+위 코드는 클로저를 사용한 예시입니다. 내부 함수가 외부 함수의 변수에 접근할 수 있습니다. 이를 통해 외부 함수의 변수를 보호하고, 내부 함수가 외부 함수의 변수를 사용할 수 있습니다.
+
+외부 스코프가 종료되어도 내부 함수가 외부 변수를 참조하고 있기 때문에 외부 변수는 사라지지 않습니다.
+
+## 추가되는 클로저
+
+```javascript
+function makeCounter() {
+  var count = 0;
+  return function increment() {
+    count++;
+    return count;
+  };
+}
+
+var counter = makeCounter();
+console.log(counter()); // 1
+console.log(counter()); // 2
+
+var counter2 = makeCounter();
+console.log(counter2()); // 1
+console.log(counter2()); // 2
+```
+
+위 코드는 클로저를 사용한 예시입니다. makeCounter 함수는 increment 함수를 반환합니다. increment 함수는 count 변수를 사용합니다. 이를 통해 count 변수를 보호하고, increment 함수가 count 변수를 사용할 수 있습니다.
+
+## 스냅샷이 아닌 라이브 링크
+
+클로저에 대한 오해 중 하나는 클로저가 외부 변수의 스냅샷을 가져온다는 것입니다. 하지만 클로저는 외부 변수에 대한 라이브 링크를 가져옵니다.
+
+```javascript
+var student = "Kyle";
+
+function studentGreeter() {
+  console.log(student);
+}
+
+student = "Suzy";
+studentGreeter(); // Suzy
+```
+
+위 코드는 클로저가 외부 변수의 라이브 링크를 가져온다는 것을 보여줍니다. student 변수가 변경되어도 studentGreeter 함수는 변경된 값을 사용합니다.
+
+```javascript
+var keeps = [];
+
+for (var i = 0; i < 3; i++) {
+  keeps.push(function keep() {
+    console.log(i);
+  });
+}
+
+keeps[0](); // 3
+keeps[1](); // 3
+keeps[2](); // 3
+```
+
+1. `반복문 시작: i = 0`
+
+   - `keeps.push(function keep() { console.log(i); }); 추가`
+   - `이 함수는 i를 참조하지만, 값이 아닌 변수 자체를 참조.`
+
+2. `반복문 진행: i = 1`
+
+   - 또 다른 클로저 함수 추가.
+   - 하지만 이전 클로저 함수도 여전히 같은 i를 참조.
+
+3. `반복문 종료: i = 3`
+
+   - 반복문이 끝난 뒤에도 i는 값 3으로 유지.
+
+4. `keeps[0](), keeps[1](), keeps[2]() 호출:`
+
+   - 모두 i를 참조하여 현재 값 3을 출력.
+
+i는 새로 생성되는 것이 아닙니다. 그렇기 때문에 하나의 i를 참조하고 있습니다. 그렇기 때문에 keeps 배열의 모든 함수가 3을 출력합니다.
+
+이를 해결하기 위해서는 let을 사용하면 됩니다.
+왜냐하면 let은 블록 스코프이기 때문에 반복문이 끝나면 변수가 사라지기 때문입니다.
+
+## 관찰 가능한 클로저의 정의
+
+> 클로저는 함수가 외부 스코프의 변수를 사용하면서, 그 변수에 접근 가능하지 않은 다른 스코프에서 실행될 때 관찰할 수 있습니다.
+
+- 반드시 함수와 관련
+- 외부스코프의 변수를 사용
+- 스코프체인이 다른 분기에서 함수를 실행
+
+## 쿨로저의 생명주기와 가비지 컬렉션
+
+클로저는 함수가 선언될 때의 렉시컬 환경을 기억합니다. 이 덕분에 함수가 선언될 때의 환경을 기억하고, 이후에도 그 환경을 사용할 수 있습니다.
+
+클로저는 공짜가 아닙니다. 클로저는 메모리를 사용합니다. 그렇기 때문에 클로저를 사용할 때는 메모리를 고려해야합니다.
+
+10개의 함수가 있고, 각각의 클로저가 있는 상황이라면 이 함수가 GC되려면 어떤 조건이 필요할까요?
+
+- 함수가 호출되지 않아야합니다.
+- 함수가 클로저를 참조하지 않아야합니다.
+
+## 클로저를 사용하는 이유
+
+- 데이터 은닉
+- 캡슐화
+- 모듈 패턴
+- 메모리 관리
+
+예시는 react의 useState입니다. useState는 클로저를 사용하여 상태를 관리합니다.
+
+```javascript
+function useState(initialValue) {
+  let _val = initialValue;
+
+  function state() {
+    return _val;
+  }
+
+  function setState(newVal) {
+    _val = newVal;
+  }
+
+  return [state, setState];
+}
+
+let [count, setCount] = useState(1);
+
+console.log(count()); // 1
+setCount(2);
+console.log(count()); // 2
+
+let [name, setName] = useState("Kyle");
+
+console.log(name()); // Kyle
+setName("Suzy");
+console.log(name()); // Suzy
+```
+
+</details>
