@@ -39,6 +39,20 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "데이터베이스",
+      items: [
+        "computer-science/database/intro",
+        "computer-science/database/day1",
+        "computer-science/database/day2",
+        "computer-science/database/day3",
+        "computer-science/database/day4",
+        "computer-science/database/day5",
+        "computer-science/database/day6",
+        "computer-science/database/day7",
+      ],
+    },
+    {
+      type: "category",
       label: "네트워크",
       items: [
         "computer-science/network/intro",
@@ -47,6 +61,8 @@ const sidebars: SidebarsConfig = {
         "computer-science/network/day3",
         "computer-science/network/day4",
         "computer-science/network/day5",
+        "computer-science/network/day6",
+        "computer-science/network/day7",
       ],
     },
   ],

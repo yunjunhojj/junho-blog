@@ -1,4 +1,4 @@
-# Day2: 전송 계층과 응용 계층 프로토콜
+# Day 2: 전송 계층과 응용 계층 프로토콜
 
 - TCP vs UDP
   - 특징, 연결 설정(3-Way Handshake, 4-Way Handshake)
