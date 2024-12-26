@@ -37,6 +37,18 @@ const sidebars: SidebarsConfig = {
         "computer-science/operations-system/day5",
       ],
     },
+    {
+      type: "category",
+      label: "네트워크",
+      items: [
+        "computer-science/network/intro",
+        "computer-science/network/day1",
+        "computer-science/network/day2",
+        "computer-science/network/day3",
+        "computer-science/network/day4",
+        "computer-science/network/day5",
+      ],
+    },
   ],
   tutorialSidebar: [
     "intro",
