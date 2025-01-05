@@ -335,3 +335,109 @@ function isAnagram(s, t) {
 ```
 
 </details>
+
+## 5. best time to buy and sell stock
+
+<details>
+  <summary>문제 보기</summary>
+
+**문제 설명**
+
+정수 배열 prices가 주어질 때, i번째 요소가 i일에 주어진 주식의 가격을 나타냅니다.
+
+한 번의 거래로 낼 수 있는 최대 이익을 계산하세요.
+
+**입출력 예**
+
+Example 1:
+
+Input: prices = [7,1,5,3,6,4]
+
+Output: 5
+
+Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+
+Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
+
+Example 2:
+
+Input: prices = [7,6,4,3,1]
+
+Output: 0
+
+Explanation: In this case, no transactions are done and the max profit = 0.
+
+**제한사항**
+
+- `1 <= prices.length <= 10^5`
+- `0 <= prices[i] <= 10^4`
+
+**풀이**
+
+1. 브루트 포스로 계산 - 모든 조합을 (시간 복잡도: O(N^2))
+2. 최솟값과 최댓값 계산 - 최솟값과 최댓값을 계산하고 차이를 구함 (시간 복잡도: O(N))
+
+```javascript
+// 브루트 포스로 계산 - 내 풀이
+function maxProfit(prices) {
+  let maxProfit = 0;
+
+  for (let i = 0; i < prices.length; i++) {
+    for (let j = i + 1; j < prices.length; j++) {
+      maxProfit = Math.max(maxProfit, prices[j] - prices[i]);
+    }
+  }
+
+  return maxProfit;
+}
+
+// 최솟값과 최댓값 계산
+function maxProfit(prices) {
+  let minPrice = Infinity;
+  let maxProfit = 0;
+
+  for (let i = 0; i < prices.length; i++) {
+    minPrice = Math.min(minPrice, prices[i]);
+    maxProfit = Math.max(maxProfit, prices[i] - minPrice);
+  }
+
+  return maxProfit;
+}
+```
+
+</details>
+
+## 6. 최대공약수와 최소공배수
+
+<details>
+  <summary>문제 보기</summary>
+
+**문제 설명**
+
+두 수를 입력받아 두 수의 최대공약수와 최소공배수를 반환하세요.
+
+**입출력 예**
+
+입력: 첫째 줄에는 두 개의 자연수가 주어진다. 이 둘은 10,000이하의 자연수이며 사이에 한 칸의 공백이 주어진다.
+
+출력: 첫째 줄에는 입력으로 주어진 두 수의 최대공약수를, 둘째 줄에는 입력으로 주어진 두 수의 최소공배수를 출력한다.
+
+**풀이**
+
+1. 유클리드 호제법으로 계산 - 최대공약수를 구하고 최소공배수를 계산 (시간 복잡도: O(logN)) -> 이걸로 푸는 지는 아는데, 공식 생각안나서 걍 풀이 보고 했음
+
+```javascript
+// 유클리드 호제법으로 계산
+function gcd(a, b) {
+  return b === 0 ? a : gcd(b, a % b);
+}
+
+function solution(n, m) {
+  const g = gcd(n, m);
+  const l = (n * m) / g;
+
+  return [g, l];
+}
+```
+
+</details>
