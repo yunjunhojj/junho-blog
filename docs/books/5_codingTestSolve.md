@@ -526,6 +526,8 @@ class Queue {
 }
 ```
 
+</details>
+
 ## Queue와 Stack을 이용한 문제풀이
 
 <details>
