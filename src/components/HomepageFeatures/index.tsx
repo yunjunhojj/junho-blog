@@ -75,7 +75,7 @@ export default function HomepageFeatures(): JSX.Element {
     } else if (distance(position, blogPosition) < 90) {
       window.location.href = "/blog"; // Blog 페이지로 이동
     } else if (distance(position, aboutPosition) < 120) {
-      window.location.href = "/about"; // About 페이지로 이동
+      window.open("https://www.yunjunho.info", "_blank");
     }
   };
 
