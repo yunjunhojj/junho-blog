@@ -1,6 +1,7 @@
 import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
+
 const config: Config = {
   headTags: [
     {
@@ -155,6 +156,11 @@ const config: Config = {
         {
           to: "/docs/books/intro",
           label: "Books",
+          position: "left",
+        },
+        {
+          to: "/docs/articles/intro",
+          label: "Articles",
           position: "left",
         },
         // {
