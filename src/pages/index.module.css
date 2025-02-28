@@ -1,5 +1,7 @@
 .heroBanner {
-  background: #f7f7f7; /* 헤더 영역 배경색 */
+  background-color: var(--color-bg);
+  color: var(--color-text);
+
   /* 원래는 padding: 3rem 1rem; 였는데, 상단 패딩을 늘려서 내려보자 */
   padding: 5rem 1rem;
   text-align: center;
@@ -70,8 +72,9 @@
   transition: transform 0.2s ease;
   padding: 1rem;
   border-radius: 10px;
-  background-color: #f7f7f7;
-
+  background-color: var(--color-card-bg);
+  color: var(--color-text);
+  border-radius: 8px;
   font-size: 1.5rem;
 }
 
