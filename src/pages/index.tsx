@@ -40,7 +40,12 @@ export default function Home(): JSX.Element {
           </div>
           {/* About 링크 */}
           <div className={styles.linkItem}>
-            <a href="/about" className={styles.linkBox}>
+            <a
+              href="https://www.yunjunho.info"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.linkBox}
+            >
               <img
                 src="/svg/about.svg"
                 alt="About"
