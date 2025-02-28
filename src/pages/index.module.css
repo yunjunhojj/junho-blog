@@ -1,20 +1,56 @@
 .heroBanner {
+  background: #f7f7f7; /* 헤더 영역 배경색 */
+  /* 원래는 padding: 3rem 1rem; 였는데, 상단 패딩을 늘려서 내려보자 */
+  padding: 5rem 1rem;
   text-align: center;
-  padding: 4rem 0;
+  /* 필요하다면 margin-bottom을 추가해도 좋음 */
+  /* margin-bottom: 2rem; */
 }
 
-.mainContainer {
+.heroContainer {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+}
+
+.subtitle {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #666;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+}
+
+.description {
+  color: #999;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+.main {
+  /* 메인도 아래쪽으로 조금 더 여백을 줄 수 있음 */
+  padding: 8rem 1rem;
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 2rem auto;
-  flex-direction: column;
 }
 
 .linkContainer {
   display: flex;
-  gap: 2rem; /* 아이콘 사이 간격 */
-  flex-wrap: wrap; /* 화면 크기에 따라 자동 줄바꿈 */
+  gap: 4rem;
+  flex-wrap: wrap; /* 화면 줄어들 때 줄바꿈 */
   justify-content: center;
   align-items: center;
 }
@@ -23,16 +59,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.linkBox {
   text-decoration: none;
-  cursor: pointer;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s ease;
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: #f7f7f7;
+
+  font-size: 1.5rem;
 }
 
-.linkIcon {
-  width: 80px;
-  height: 80px;
-  transition: transform 0.3s ease;
+.linkBox:hover {
+  transform: translateY(-5px);
 }
 
-.linkIcon:hover {
-  transform: scale(1.1);
+.iconImage {
+  height: 60px;
+  margin-bottom: 0.5rem;
 }
