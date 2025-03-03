@@ -66,6 +66,20 @@ const sidebars: SidebarsConfig = {
         "computer-science/network/day7",
       ],
     },
+    {
+      type: "category",
+      label: "알고리즘",
+      items: [
+        "computer-science/algorithm/intro",
+        "computer-science/algorithm/day1",
+        "computer-science/algorithm/day2",
+        "computer-science/algorithm/day3",
+        "computer-science/algorithm/day4",
+        "computer-science/algorithm/day5",
+        "computer-science/algorithm/day6",
+        "computer-science/algorithm/day7",
+      ],
+    },
   ],
   tutorialSidebar: [
     "intro",
