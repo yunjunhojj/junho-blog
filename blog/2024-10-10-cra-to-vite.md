@@ -1,5 +1,5 @@
 ---
-title: CRA에서 Vite로 마이그레이션하기
+title: CRA -> Vite로 마이그레이션
 slug: cra-to-vite
 tags:
   - react
