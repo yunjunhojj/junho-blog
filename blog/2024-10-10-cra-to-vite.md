@@ -52,6 +52,16 @@ Vite를 설치합니다.
 npm install --save-dev vite @vitejs/plugin-react
 ```
 
+이 때
+`npm error Found: @types/node@16.18.126
+npm error node_modules/@types/node
+npm error   @types/node@"^16.18.126" from the root project`
+에러가 발생하면, 아래의 명령어를 실행해주세요. 그 후 다시 Vite를 설치합니다.
+
+```bash
+npm install @types/node@latest --save-dev
+```
+
 이제 package.json의 scripts를 다음과 같이 수정합니다.
 
 ```json
@@ -83,7 +93,26 @@ export default defineConfig({
 CRA의 public/index.html을 루트로 이동하고 `<script>` 태그를 변경합니다.
 
 ```js
-<script type="module" src="/src/main.tsx"></script>
+<link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+<link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+```
+
+위의 코드는 다음과 같이 변경합니다. (%PUBLIC_URL% 제거)
+
+```js
+<link rel="icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" href="/logo192.png" />
+<link rel="manifest" href="/manifest.json" />
+```
+
+```js
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  {/* 아래 추가 */}
+  <script type="module" src="/src/main.tsx"></script>
+</body>
 ```
 
 ### 6. src/main.tsx 수정
