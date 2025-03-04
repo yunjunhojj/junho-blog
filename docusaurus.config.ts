@@ -68,8 +68,17 @@ const config: Config = {
         },
         blog: {
           feedOptions: {
-            type: ["rss", "atom"],
+            type: "all",
             xslt: true,
+            copyright: `Copyright © ${new Date().getFullYear()} junho yun`,
+            createFeedItems: async (params) => {
+              const { blogPosts, defaultCreateFeedItems, ...rest } = params;
+              return defaultCreateFeedItems({
+                // keep only the 10 most recent blog posts in the feed
+                blogPosts: blogPosts.filter((item, index) => index < 10),
+                ...rest,
+              });
+            },
           },
         },
         theme: {
