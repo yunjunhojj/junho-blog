@@ -71,15 +71,9 @@ const config: Config = {
             type: "all",
             xslt: true,
             copyright: `Copyright © ${new Date().getFullYear()} junho yun`,
-            createFeedItems: async (params) => {
-              const { blogPosts, defaultCreateFeedItems, ...rest } = params;
-              return defaultCreateFeedItems({
-                // keep only the 10 most recent blog posts in the feed
-                blogPosts: blogPosts.filter((item, index) => index < 10),
-                ...rest,
-              });
-            },
           },
+          blogSidebarTitle: "All posts",
+          blogSidebarCount: "ALL",
         },
         theme: {
           customCss: "./src/css/custom.css",
@@ -153,6 +147,7 @@ const config: Config = {
           to: "/blog",
           label: "Blog",
           position: "left",
+
           readingTime: ({ content, frontMatter, defaultReadingTime }) =>
             defaultReadingTime({ content, options: { wordsPerMinute: 300 } }),
         },
