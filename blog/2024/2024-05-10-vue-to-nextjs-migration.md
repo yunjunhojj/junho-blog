@@ -10,6 +10,10 @@ authors: [junho]
 
 # vue to nextjs migration를 진행하며
 
+Vue.js에서 Next.js로의 마이그레이션을 진행하면서, iframe을 이용한 단계적 교체 방법과 postMessage를 통한 통신 방법을 알아보겠습니다.
+
+<!-- truncate -->
+
 ## 1. Vue.js에서 Next.js로의 마이그레이션 이유
 
 1. SSR(Server-Side Rendering) 지원: Vue 또한 Nuxt.js로 SSR이 가능하지만, Next.js는 React를 기반으로 다양한 생태계와 업데이트 속도를 갖추고 있어 선택했다.
