@@ -20,6 +20,7 @@
     "@docusaurus/plugin-google-tag-manager": "^3.7.0",
     "@docusaurus/plugin-sitemap": "^3.7.0",
     "@docusaurus/preset-classic": "^3.7.0",
+    "@docusaurus/theme-mermaid": "^3.7.0",
     "@headlessui/react": "^2.1.5",
     "@mdx-js/react": "^3.0.0",
     "@uiw/react-markdown-editor": "^6.1.2",

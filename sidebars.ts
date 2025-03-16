@@ -11,13 +11,14 @@ const componentsFiles = fs.readdirSync(componentsDir);
 const hooksFiles = fs.readdirSync(hooksDir);
 const utilsFiles = fs.readdirSync(utilsDir);
 const cssFiles = fs.readdirSync(`${docsDir}/css`);
+const honghaePlusFiles = fs.readdirSync(`${docsDir}/honghae-plus`);
 const booksFiles = fs.readdirSync(`${docsDir}/books`);
 const svgFiles = fs.readdirSync(`${docsDir}/svg`);
 const articlesFiles = fs.readdirSync(`${docsDir}/articles`);
 
 const cutPrefixNumber = (fileName: string) => fileName.split("_")[1];
 const cutSuffixMd = (fileName: string) => fileName.split(".")[0];
-const convertToDoctitle = (fileName: string) =>
+const convertToDocTitle = (fileName: string) =>
   cutSuffixMd(cutPrefixNumber(fileName));
 
 const sidebars: SidebarsConfig = {
@@ -86,12 +87,21 @@ const sidebars: SidebarsConfig = {
     {
       type: "category",
       label: "svg tutorial",
-      items: [...svgFiles.map((file) => `svg/${convertToDoctitle(file)}`)],
+      items: [...svgFiles.map((file) => `svg/${convertToDocTitle(file)}`)],
     },
     {
       type: "category",
       label: "css tutorial",
-      items: [...cssFiles.map((file) => `css/${convertToDoctitle(file)}`)],
+      items: [...cssFiles.map((file) => `css/${convertToDocTitle(file)}`)],
+    },
+    {
+      type: "category",
+      label: "honghae plus",
+      items: [
+        ...honghaePlusFiles.map(
+          (file) => `honghae-plus/${convertToDocTitle(file)}`
+        ),
+      ],
     },
   ],
   toolboxSidebar: [
@@ -104,19 +114,19 @@ const sidebars: SidebarsConfig = {
       label: "Components",
       items: [
         ...componentsFiles.map(
-          (file) => `components/${convertToDoctitle(file)}`
+          (file) => `components/${convertToDocTitle(file)}`
         ),
       ],
     },
     {
       type: "category",
       label: "Hooks",
-      items: [...hooksFiles.map((file) => `hooks/${convertToDoctitle(file)}`)],
+      items: [...hooksFiles.map((file) => `hooks/${convertToDocTitle(file)}`)],
     },
     {
       type: "category",
       label: "Utils",
-      items: [...utilsFiles.map((file) => `utils/${convertToDoctitle(file)}`)],
+      items: [...utilsFiles.map((file) => `utils/${convertToDocTitle(file)}`)],
     },
   ],
   booksSidebar: [
