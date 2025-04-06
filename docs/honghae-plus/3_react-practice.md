@@ -13,11 +13,14 @@ npm install @babel/core @babel/preset-react @babel/plugin-transform-react-jsx
 # tsconfig.json
 {
   "compilerOptions": {
+    "jsx": "react",
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "Node",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   }
 }
 ```
@@ -84,6 +87,7 @@ const App = (
 
 // eslint-disable-next-line react/no-deprecated
 React.render(App, document.getElementById("root"));
+// React.render(<App />, document.getElementById("root"));
 ```
 
 src/mini-react.ts
