@@ -1,4 +1,4 @@
-# 3. JS와 React 심화 실습
+# 3주차: 직접 React를 구현해보자
 
 ## self made mini react
 

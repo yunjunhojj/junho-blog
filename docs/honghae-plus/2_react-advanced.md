@@ -1,4 +1,4 @@
-# 2. React Deep Dive (React 심화 학습)
+# 2주차: React Core Concepts
 
 리액트의 내부 동작에 대해 더 깊이 이해해보겠습니다.
 
