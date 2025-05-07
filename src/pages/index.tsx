@@ -39,7 +39,7 @@ export default function Home(): JSX.Element {
             </a>
           </div>
           {/* About 링크 */}
-          <div className={styles.linkItem}>
+          {/* <div className={styles.linkItem}>
             <a
               href="https://www.yunjunho.info"
               target="_blank"
@@ -53,7 +53,7 @@ export default function Home(): JSX.Element {
               />
               <p>누구세요?</p>
             </a>
-          </div>
+          </div> */}
         </div>
       </main>
     </Layout>
