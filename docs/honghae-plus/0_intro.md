@@ -11,7 +11,7 @@ xx플러스 라는 교육 프로그램이 있습니다. 이 프로그램은 주�
 2. [JS 내부 동작](./1_js-react-deep-dive.md)
 3. [React 내부 동작](./2_react-advanced.md)
 4. [JS와 React 심화 실습](./3_react-practice.md)
-5. [JS와 React 클린코드 원칙](./4_react-clean-code.md)
+5. [JS와 React 클린코드 원칙](./4_js-clean-code.md)
 6. [JS와 React 디자인 패턴과 컴포넌트 설계](./5_react-design-pattern.md)
 7. [JS와 React SOLID 원칙](./6_react-solid.md)
 8. [단위 테스트](./7_unit-test.md)
