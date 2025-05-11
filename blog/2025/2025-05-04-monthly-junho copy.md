@@ -1,6 +1,6 @@
 ---
 title: "지속적인 성장을 위한 월간 개발자"
-slug:
+slug: "monthly-developer"
 tags:
   - career
   - mindset

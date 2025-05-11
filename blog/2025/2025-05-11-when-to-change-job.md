@@ -1,6 +1,6 @@
 ---
 title: "언제 이직을 결심하고, 실행해야할까"
-slug:
+slug: "when-to-change-job"
 tags:
   - career
 authors: [junho]
@@ -9,6 +9,8 @@ authors: [junho]
 # 이직은 언제, 어떻게 결심하고 실행할 것인가?
 
 > 성장 · 인정 · 기회 — 세 가지 관점으로 풀어본 이직의 시점과 실행 방법
+
+<!-- truncate -->
 
 ---
 
