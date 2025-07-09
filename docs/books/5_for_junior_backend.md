@@ -433,3 +433,534 @@ Worker-->>DB: 데이터 저장
 - 시스템 전반을 이해하고, 원인을 추론할 수 있는 실력이 중요
 
 </details>
+
+<!-- <details> -->
+  <summary>6장 동시성, 데이터가 꼬이기 전에 잡아야 한다</summary>
+
+## 동시성이란?
+
+> 동시성이란, 여러 작업이나 프로세스가 동시에 실행되는 것처럼 보이는 것을 의미합니다. 컴퓨터 과학에서는 여러 작업이 동시에 진행되는 것처럼 보이게 하는 기법을 말하며, 실제로는 CPU가 빠르게 번갈아 가며 작업을 처리합니다.
+
+### 서버와 동시 실행
+
+트래픽이 낮아도 요청은 많을 수 있다. 그러니까 미리 준비해두는 것이 중요하다.
+
+**동시에 여러 요청을 처리하는 방법**
+
+- 요청마다 스레드 할당
+- 비동기 IO, 논블로킹 IO 사용해서 처리
+
+```java
+public class Incrementer {
+  private int count = 0;
+
+  public void increment() {
+    count++;
+  }
+
+  public int getCount() {
+    return count;
+  }
+}
+```
+
+위의 코드는 동시성 문제가 발생할 수 있다.
+다중 스레드 환경에서 두 스레드가 동시에 count를 증가시키려고 하면 예상치 못한 결과가 발생할 수 있다.
+
+<!-- 한쪽에는 thread1, 다른 한쪽에는 thread2가 있다. 둘다 동시에 실행된다. count 값을 구하고 그 값을 증가시킨다. 그리고 그결과를 반영한다. -->
+
+```mermaid
+sequenceDiagram
+thread1->>thread1: count 값을 구하고 (5)
+thread2->>thread2: count 값을 구하고 (5)
+thread1->>thread1: count 값을 증가시킨다. (6)
+thread2->>thread2: count 값을 증가시킨다. (6)
+thread1->>thread1: 그결과를 반영한다. (6)
+thread2->>thread2: 그결과를 반영한다. (6)
+```
+
+> race condition: 두 스레드가 동시에 같은 데이터를 수정하려고 할 때 발생하는 문제
+
+## 잘못된 데이터 공유로 인한 문제 에시
+
+```java
+public class PaymentService {
+  private Long paymentId;
+
+  public PayResp pay(PayReq req) {
+    this.paymentId = req.getPaymentId();
+    saveTemp(this.paymentId, req);
+    PayResp resp = savePayData(this.paymentId, ...);
+    applyResponse(resp);
+    return resp;
+  }
+
+  private void saveTemp(Long paymentId, PayReq req) {
+    // 임시 저장
+  }
+
+  private PayResp savePayData(Long paymentId, PayReq req) {
+    // 결제 데이터 저장
+  }
+
+  private void applyResponse(PayResp resp) {
+    PayData payData = createPayDataFromResp(resp);
+    updatePayData(this.paymentId, payData);
+  }
+
+  private PayData createPayDataFromResp(PayResp resp) {
+    // 결제 데이터 생성
+  }
+
+  private void updatePayData(Long paymentId, PayData payData) {
+    // 결제 데이터 업데이트
+  }
+}
+```
+
+위의 코드도 paymentId 값이 공유되는 문제가 있다.
+
+> 동시성은 간헐적으로 발생하는 경우가 많다. 그렇기 때문에 문제를 찾기가 어렵다.
+
+## 프로세스 수준에서의 동시 접근 제어
+
+**Lock을 사용해서 동시성 문제를 해결할 수 있다.**
+
+공유 자원에 대한 접근하는 스레드를 하나로 제한하는 것
+
+1. 공유 자원에 대한 접근을 제한한다.
+2. 접근 제한 후 작업을 수행한다. (임계 영역)
+3. 작업이 완료되면 접근 제한을 해제한다.
+
+> 임계 영역: 공유 자원에 대한 접근을 제한한 영역 (둘 이상의 스레드가 동시에 접근할 수 없는 영역)
+
+```mermaid
+sequenceDiagram
+thread1->>thread1: Lock 획득
+thread2->>thread2: Lock 획득 시도 -> 대기
+thread1->>thread1: 임계 영역 접근 -> 작업 수행
+thread2->>thread2: 임계 영역 접근 -> 대기
+thread1->>thread1: Lock 해제
+thread2->>thread2: Lock 획득 -> 임계 영역 접근
+```
+
+> 락을 획득한 스레드만 임계 영역에 접근할 수 있다.
+
+구현 방법은 "synchronized" 키워드 또는 "ReentrantLock" 클래스를 사용한다.
+
+```java
+public class PaymentService {
+    private Long paymentId; // 공유 자원
+
+    private final Object lock = new Object();
+
+    public void processPayment(PayReq req) {
+        synchronized (lock) {
+            paymentId = req.getPaymentId();
+            saveTemp(paymentId, req);
+            savePayData(paymentId, req);
+            applyResponse(paymentId);
+        }
+    }
+
+    private void saveTemp(Long paymentId, PayReq req) {
+        // 임시 저장
+    }
+
+    private void savePayData(Long paymentId, PayReq req) {
+        // 결제 데이터 저장
+    }
+
+    private void applyResponse(Long paymentId) {
+        // 응답 적용
+    }
+}
+```
+
+> 뮤텍스(Mutex): 임계 영역을 보호하는 기본적인 동기화 메커니즘 (Mutual Exclusion), 한국어로는 상호 배제라고 한다. Lock으로 부르기도 한다.
+
+### 세마포어
+
+> 동시에 접근할 수 있는 스레드의 개수를 제한하는 기본적인 동기화 메커니즘
+
+자바에서는 세마포어 구현체를 퍼밋(Permit) 이라고 부른다.
+
+동작 방식은 아래와 같다.
+
+1. 세마포어에서 퍼밋을 획득한다. (허용가능한 스레드 -1)
+2. 임계 영역에 접근한다.
+3. 임계 영역을 벗어나면 퍼밋을 반납한다. (허용가능한 스레드 +1)
+
+```java
+public class PaymentService {
+  private final Semaphore semaphore = new Semaphore(5); // 허용가능한 스레드 개수
+
+  public void processPayment(PayReq req) {
+    try {
+      semaphore.acquire();
+    } catch (InterruptedException e) {
+      // 예외 처리
+    }
+
+    try {
+      // 임계 영역 -> 최대 5개의 스레드만 접근 가능
+    } finally {
+      semaphore.release();
+    }
+  }
+}
+```
+
+**읽기 쓰기 잠금**
+
+> 읽기 작업은 동시에 여러 스레드가 접근할 수 있지만, 쓰기 작업은 하나의 스레드만 접근할 수 있도록 제한하는 기본적인 동기화 메커니즘
+
+```java
+public class PaymentService {
+  private final ReadWriteLock lock = new ReentrantReadWriteLock();
+
+  public void processPayment(PayReq req) {
+    lock.readLock().lock();
+    try {
+      // 읽기 작업 -> 동시에 여러 스레드가 접근 가능
+    } finally {
+      lock.readLock().unlock();
+    }
+  }
+
+  public void processPayment(PayReq req) {
+    lock.writeLock().lock();
+    try {
+      // 쓰기 작업 -> 하나의 스레드만 접근 가능
+    } finally {
+      lock.writeLock().unlock();
+    }
+  }
+}
+```
+
+### 원자적타입 (Atomic Type)
+
+> 원자적 타입은 하나의 작업으로 처리되는 타입을 의미한다.
+
+```java
+public class PaymentService {
+  private int count = 0;
+
+  public void increment() {
+    count++;
+  }
+}
+```
+
+위의 코드는 동시성 문제가 발생할 수 있다. 왜냐하면 count 값을 증가시키는 작업이 여러 스레드에서 동시에 실행될 수 있기 때문이다.
+
+```java
+public class PaymentService {
+  private int count = 0;
+  private Lock lock = new ReentrantLock();
+
+  public void increment() {
+    lock.lock();
+    try {
+      count++;
+    } finally {
+      lock.unlock();
+    }
+  }
+}
+```
+
+위의 코드는 동시성 문제는 없지만, CPU 효율이 떨어진다.
+
+> 원자적 타입은 하나의 작업으로 처리되는 타입을 의미한다.
+
+```java
+public class PaymentService {
+  private AtomicInteger count = new AtomicInteger(0);
+
+  public void increment() {
+    count.incrementAndGet();
+  }
+}
+```
+
+AtomicInteger 클래스는 원자적 작업을 수행하는 클래스이다. 내부적으로 동기화를 처리하기 때문에 동시성 문제가 발생하지 않는다. (CAS 알고리즘)
+
+> CAS 알고리즘: 비교 후 교체 알고리즘, 원자적 작업을 수행하는 알고리즘
+
+    1.	메모리의 값이 내가 기대한 값인지 확인(Compare)
+    2.	같으면 새 값으로 교체(Swap)
+    3.	다르면 아무것도 안 하고 다시 시도
+
+“값이 내가 생각한 상태일 때만 교체하고, 아니면 다시 시도하는 알고리즘”
+
+```text
+function CAS(memory_address, expected_value, new_value):
+    if *memory_address == expected_value:
+        *memory_address = new_value
+        return true
+    else:
+        return false
+```
+
+### 동시성 지원 컬렉션
+
+> 동시성 지원 컬렉션은 동시성 문제를 해결하기 위한 컬렉션 클래스를 의미한다.
+
+```java
+public class PaymentService {
+  private Map<Long, PayData> payDataMap = new ConcurrentHashMap<>(); // 동시성 지원 컬렉션
+  // 안좋은 예시
+  // private Map<Long, PayData> payDataMap = new HashMap<>();
+
+  public void processPayment(PayReq req) {
+    payDataMap.put(req.getPaymentId(), req); // 동시성 문제 없음
+  }
+}
+```
+
+### DB와 동시성
+
+**트랜지션**
+
+> 트랜지션은 데이터베이스 작업의 단위를 의미한다.
+
+**트랜지션으로 얻는 이점**
+
+- 데이터 일관성 보장
+- 데이터 무결성 보장
+- 데이터 정합성 보장
+
+**비관적과 낙관적 잠금**
+
+- 비관적 잠금: 데이터를 읽거나 쓰기 전에 잠금을 획득하는 방식 -> 실패 가능성이 높아서 비관적
+- 낙관적 잠금: 데이터를 읽거나 쓰기 전에 잠금을 획득하지 않고, 작업을 수행한 후 잠금을 획득하는 방식 -> 실패 가능성이 낮아서 낙관적
+
+### 선점 잠금 (비관적 잠금)
+
+> 먼저 접근한 놈이 잠금을 획득한다.
+
+```sql
+select * from 테이블 where 조건 for update;
+```
+
+테이블에서, 조건에 맞는 데이터를 읽고, 잠금을 획득한다.
+
+예시: 게시글을 읽으려는 사용자가 있고, 게시글을 수정하려는 사용자가 있다.
+
+```mermaid
+sequenceDiagram
+클라이언트1->>DB: 게시글 읽기(잠금 획득)
+클라이언트2->>DB: 게시글 읽기(시도 but 대기)
+클라이언트1->>DB: 잠금 해제
+클라이언트2->>DB: 잠금 획득
+클라이언트2->>DB: 게시글 수정
+클라이언트2->>DB: 잠금 해제
+```
+
+```mermaid
+sequenceDiagram
+클라이언트1->>DB: 게시글 읽기(잠금 획득)
+클라이언트2->>DB: 게시글 읽기(시도 but 대기)
+클라이언트1->>DB: 게시글 삭제
+클라이언트1->>DB: 잠금 해제
+클라이언트2->>DB: 잠금 획득(게시글 삭제됨 확인)
+클라이언트2->>DB: 잠금 해제
+```
+
+### 비선점 (낙관적 잠금)
+
+> 데이터 충돌은 드물다고 가정하고 먼저 처리, 나중에 검증
+
+**개념 요약**
+
+- 비관적 잠금(Pessimistic Lock)은 **먼저 락 걸고** 작업
+- 낙관적 잠금(Optimistic Lock)은 **먼저 작업하고** 나중에 충돌 체크
+- 충돌 시 **실패하거나 재시도**
+
+**동작 원리**
+
+1. 데이터를 조회
+2. 조회 시점의 버전(version) 또는 타임스탬프(timestamp) 기록
+3. 데이터를 수정 후, 업데이트할 때 버전도 함께 비교
+4. 버전이 같으면 업데이트 → 버전 +1
+5. 버전이 다르면 충돌 감지 → 실패 or 재시도
+
+**장점**
+
+- 락으로 인한 병목 없이 성능 향상
+
+**단점**
+
+- 충돌이 잦은 환경에서는 실패/재시도 증가 → 성능 저하
+- 실시간성이 중요한 시스템에는 부적합
+
+```sql
+-- 데이터 조회
+select * from posts where id = 1; -- 버전 0 (버전을 함께 조회)
+
+-- 데이터 수정
+update posts set title = 'new title', version = version + 1 where id = 1 and version = 0; -- 버전 1 (버전을 함께 수정)
+
+-- 데이터 조회
+select * from posts where id = 1; -- 버전 1 (버전을 함께 조회)
+
+-- 데이터 수정
+update posts set title = 'new title', version = version + 1 where id = 1 and version = 0; -- 버전 2 (버전을 함께 수정)
+```
+
+```java
+import jakarta.persistence.OptimisticLockException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class PostService {
+    private final PostRepository postRepository;
+
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
+
+    @Transactional
+    public void updatePost(Long id, String newContent) {
+        Post post = postRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        post.setContent(newContent);
+
+        // ✅ 커밋 시점에 version 비교 -> JPA에서 제공하는 기능
+        // 다른 트랜잭션에서 version 변경했으면 OptimisticLockException 발생
+    }
+
+    @Transactional
+    public Post getPost(Long id) {
+        return postRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Post not found"));
+    }
+}
+```
+
+### 잠금 사용 시 주의사항
+
+- 잠근 해제하기: 잠금을 획득한 후 해제하지 않으면 다른 스레드가 대기할 수 있다.
+- 대기 시간 최소화: 대기 시간을 최소화하여 UX 문제를 줄인다.
+
+## 교착 상태(Deadlock) 피하기
+
+> **“교착 상태란 둘 이상의 프로세스가 서로 자원을 점유한 채 영원히 대기하는 상태”**  
+> 동시성 프로그래밍에서 매우 위험한 상황으로, 시스템 전체가 멈출 수 있다.
+
+### 교착 상태란?
+
+**정의**
+
+- 두 개 이상의 스레드/프로세스가 서로가 점유한 **락(Lock)이나 자원(Resource)** 을 기다리며 무한 대기하는 상태
+- 자원을 서로 양보하지 않아서 발생
+
+### 교착 상태 발생 조건 (Coffman’s Four Conditions)
+
+1. **상호 배제(Mutual Exclusion)**
+
+   - 한 번에 하나의 프로세스만 자원 사용 가능
+
+2. **점유와 대기(Hold and Wait)**
+
+   - 자원을 점유한 상태에서 다른 자원을 기다림
+
+3. **비선점(No Preemption)**
+
+   - 점유한 자원을 강제로 빼앗을 수 없음
+
+4. **대기 사이클(Circular Wait)**
+   - 프로세스들이 서로 자원을 점유하고 다음 자원을 요청하는 원형 대기 발생
+
+> 4가지 조건이 모두 만족할 때 교착 상태 발생 가능
+
+### 예제: 두 개의 락으로 발생하는 Deadlock
+
+```java
+public class DeadlockExample {
+    private final Object lock1 = new Object();
+    private final Object lock2 = new Object();
+
+    public void task1() {
+        synchronized (lock1) {
+            System.out.println("Task1: lock1 획득");
+            synchronized (lock2) {
+                System.out.println("Task1: lock2 획득");
+            }
+        }
+    }
+
+    public void task2() {
+        synchronized (lock2) {
+            System.out.println("Task2: lock2 획득");
+            synchronized (lock1) {
+                System.out.println("Task2: lock1 획득");
+            }
+        }
+    }
+}
+```
+
+> 기아 상태: 대기 중인 스레드가 없는 상태
+
+### 교착 상태 해결 방법
+
+- 잠금 순서 고정
+- 잠금 범위 최소화
+- 잠금 해제 시점 조정
+- 잠금 대기 시간 제한
+
+## 단일 스레드로 처리하기
+
+> **“동시성 문제? 그냥 단일 스레드로 해결하면 된다!”**  
+> 모든 요청을 하나의 스레드에서 순차 처리하면 공유 자원 접근 문제를 원천 차단할 수 있다.
+
+### 단일 스레드 처리란?
+
+- 한 번에 하나의 요청만 처리하는 방식
+- 여러 스레드가 동시에 실행되지 않음 → **락(lock)**, **동기화(synchronization)** 필요 없음
+- 이벤트 루프(Event Loop)나 큐(queue)를 통해 요청을 순차적으로 처리
+
+### 장점
+
+| 항목             | 설명                                     |
+| ---------------- | ---------------------------------------- |
+| 동시성 문제 없음 | 데이터 경합(race condition), 교착 상태 X |
+| 락 불필요        | 락으로 인한 병목, 오버헤드 제거          |
+| 구현 단순화      | 복잡한 동기화 코드 제거                  |
+
+### 단점
+
+| 항목           | 설명                                     |
+| -------------- | ---------------------------------------- |
+| 처리 속도 제한 | 요청을 병렬 처리하지 못함                |
+| CPU 활용 저조  | 멀티코어 시스템에서 단일 코어만 사용     |
+| 긴 작업 대기   | 하나의 작업이 오래 걸리면 다음 요청 지연 |
+
+---
+
+## 🧠 동작 방식
+
+### 이벤트 루프 모델
+
+1. 요청을 큐에 넣음
+2. 이벤트 루프가 하나씩 꺼내 처리
+3. 처리 완료 후 다음 요청 처리
+
+```mermaid
+sequenceDiagram
+Client->>Server: 요청1
+Client->>Server: 요청2
+Client->>Server: 요청3
+Server->>Queue: 요청1 저장
+Server->>Queue: 요청2 저장
+Server->>Queue: 요청3 저장
+loop 단일 스레드 처리
+    Queue->>Server: 요청 꺼냄
+    Server->>Client: 응답
+end
+```
